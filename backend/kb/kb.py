@@ -102,28 +102,3 @@ def build_visual_text(record: dict) -> str:
     LOOKS, not against opening hours or directions (which would hurt matching).
     """
     return record["visual_description"]
-
-
-# Quick self-check when run directly: python -m backend.kb.kb
-if __name__ == "__main__":
-    kb = load_kb()
-    records = get_all_records()
-    print(f"Airport: {kb['airport_name']} ({kb['airport_code']})")
-    print(f"Records loaded: {len(records)}")
-
-    sample = get_record_by_id("gate_b12")
-    print("\nSample record:", sample["name"])
-    print("Text-embedding (no keywords):")
-    print("  ", build_text_for_embedding(sample))
-    print("Text-embedding (with keywords):")
-    print("  ", build_text_for_embedding(sample, include_keywords=True))
-    print("Visual-embedding string:")
-    print("  ", build_visual_text(sample))
-
-    print("\nCategory check - all 'gate' records:")
-    for r in get_records_by_category("gate"):
-        print("  -", r["name"])
-
-    print("\nRelated facilities of gate_b12:")
-    for r in get_related("gate_b12"):
-        print("  -", r["name"])

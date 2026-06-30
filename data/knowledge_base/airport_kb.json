@@ -1,7 +1,7 @@
 {
-  "airport_name": "Northgate International Airport",
-  "airport_code": "NGA",
-  "knowledge_base_description": "Fictional airport knowledge base for the multimodal passenger assistance chatbot. Records are synthetic and do not represent any real airport.",
+  "airport_name": "Vion International Airport",
+  "airport_code": "VIA",
+  "knowledge_base_description": "Fictional knowledge base for Vion International Airport created for the multimodal passenger assistance chatbot. All records are synthetic and intended solely for research and evaluation.",
   "records": [
     {
       "id": "gate_b12",
