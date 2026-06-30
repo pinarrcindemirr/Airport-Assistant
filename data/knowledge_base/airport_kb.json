@@ -1,0 +1,523 @@
+{
+  "airport_name": "Northgate International Airport",
+  "airport_code": "NGA",
+  "knowledge_base_description": "Fictional airport knowledge base for the multimodal passenger assistance chatbot. Records are synthetic and do not represent any real airport.",
+  "records": [
+    {
+      "id": "gate_b12",
+      "name": "Gate B12",
+      "category": "gate",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 2, Zone B",
+      "description": "Boarding gate B12, used mainly for short-haul European departures.",
+      "opening_hours": "Open during scheduled flights only",
+      "directions": "From the central security exit, follow signs to Zone B and continue straight for about 200 metres. Gate B12 is on the right.",
+      "accessibility": "Step-free access via elevator near Zone B entrance. Wheelchair assistance available on request.",
+      "related_facilities": [
+        "restroom_b",
+        "restaurant_t2",
+        "information_desk_t1"
+      ],
+      "contact": null,
+      "visual_description": "gate sign with letter and number B12, departure gate signage, boarding gate board with flight information",
+      "keywords": [
+        "gate",
+        "boarding",
+        "departure",
+        "terminal 1",
+        "zone b",
+        "short-haul",
+        "european"
+      ]
+    },
+    {
+      "id": "gate_a05",
+      "name": "Gate A05",
+      "category": "gate",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 2, Zone A",
+      "description": "Boarding gate A05, used for domestic departures.",
+      "opening_hours": "Open during scheduled flights only",
+      "directions": "From security, turn left towards Zone A. Gate A05 is the fifth gate on the left.",
+      "accessibility": "Step-free access. Priority seating available near the gate.",
+      "related_facilities": [
+        "restroom_b",
+        "information_desk_t1"
+      ],
+      "contact": null,
+      "visual_description": "gate sign A05, domestic departure gate signage, illuminated gate number board",
+      "keywords": [
+        "gate",
+        "boarding",
+        "departure",
+        "terminal 1",
+        "zone a",
+        "domestic"
+      ]
+    },
+    {
+      "id": "gate_c22",
+      "name": "Gate C22",
+      "category": "gate",
+      "terminal": "Terminal 2",
+      "floor_or_zone": "Floor 3, Zone C",
+      "description": "Boarding gate C22, used for long-haul international departures.",
+      "opening_hours": "Open during scheduled flights only",
+      "directions": "Take the inter-terminal train to Terminal 2, then follow signs to Zone C on Floor 3. Gate C22 is near the far end.",
+      "accessibility": "Step-free access via elevators. Accessible restrooms nearby.",
+      "related_facilities": [
+        "lounge_t2",
+        "restroom_b",
+        "information_desk_t2"
+      ],
+      "contact": null,
+      "visual_description": "gate sign C22, international departure gate signage, large gate information display",
+      "keywords": [
+        "gate",
+        "boarding",
+        "departure",
+        "terminal 2",
+        "zone c",
+        "international",
+        "long-haul"
+      ]
+    },
+    {
+      "id": "checkin_t1_intl",
+      "name": "Terminal 1 International Check-in",
+      "category": "check_in",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, Departures Hall",
+      "description": "Check-in desks for international flights departing from Terminal 1.",
+      "opening_hours": "04:00 - 23:00 daily",
+      "directions": "Enter through the main Terminal 1 departures entrance. Check-in desks are directly ahead in rows 1 to 20.",
+      "accessibility": "Level access throughout. Dedicated assistance desk at row 1.",
+      "related_facilities": [
+        "security_t1",
+        "information_desk_t1",
+        "special_assistance_t1"
+      ],
+      "contact": "+00 000 100 100",
+      "visual_description": "check-in counter with desks and queue barriers, airline check-in sign, departures hall with check-in rows",
+      "keywords": [
+        "check-in",
+        "check in",
+        "desk",
+        "international",
+        "terminal 1",
+        "departures",
+        "bag drop"
+      ]
+    },
+    {
+      "id": "checkin_t1_domestic",
+      "name": "Terminal 1 Domestic Check-in",
+      "category": "check_in",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, Departures Hall",
+      "description": "Check-in desks for domestic flights in Terminal 1.",
+      "opening_hours": "05:00 - 22:00 daily",
+      "directions": "From the main entrance, turn right towards rows 21 to 30 for domestic check-in.",
+      "accessibility": "Level access. Self-service kiosks at accessible height available.",
+      "related_facilities": [
+        "security_t1",
+        "information_desk_t1"
+      ],
+      "contact": "+00 000 100 100",
+      "visual_description": "domestic check-in desks, self-service check-in kiosks, airline counter signage",
+      "keywords": [
+        "check-in",
+        "check in",
+        "desk",
+        "domestic",
+        "terminal 1",
+        "kiosk",
+        "self-service"
+      ]
+    },
+    {
+      "id": "baggage_claim_t1",
+      "name": "Terminal 1 Baggage Claim Hall",
+      "category": "baggage_claim",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 0, Arrivals",
+      "description": "Baggage reclaim hall for Terminal 1 arrivals, with carousels 1 to 6.",
+      "opening_hours": "Open 24 hours",
+      "directions": "After passport control, follow the 'Baggage Reclaim' signs down one level. The hall is straight ahead.",
+      "accessibility": "Step-free access via ramp and elevator. Low-height trolleys available.",
+      "related_facilities": [
+        "lost_and_found",
+        "customs_t1",
+        "taxi_pickup"
+      ],
+      "contact": null,
+      "visual_description": "baggage claim symbol with suitcase icon, luggage carousel conveyor belt, baggage reclaim hall sign",
+      "keywords": [
+        "baggage",
+        "luggage",
+        "baggage claim",
+        "reclaim",
+        "carousel",
+        "terminal 1",
+        "arrivals"
+      ]
+    },
+    {
+      "id": "baggage_claim_t2",
+      "name": "Terminal 2 Baggage Claim Hall",
+      "category": "baggage_claim",
+      "terminal": "Terminal 2",
+      "floor_or_zone": "Floor 0, Arrivals",
+      "description": "Baggage reclaim hall for Terminal 2 international arrivals, carousels 7 to 12.",
+      "opening_hours": "Open 24 hours",
+      "directions": "Follow 'Baggage Reclaim' signs after customs in Terminal 2. Take the elevator to Floor 0.",
+      "accessibility": "Fully step-free. Assistance staff available on request.",
+      "related_facilities": [
+        "lost_and_found",
+        "customs_t1"
+      ],
+      "contact": null,
+      "visual_description": "suitcase baggage symbol, conveyor belt luggage carousel, arrivals baggage reclaim signage",
+      "keywords": [
+        "baggage",
+        "luggage",
+        "baggage claim",
+        "reclaim",
+        "carousel",
+        "terminal 2",
+        "arrivals",
+        "international"
+      ]
+    },
+    {
+      "id": "security_t1",
+      "name": "Terminal 1 Security Control",
+      "category": "security",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, after Check-in",
+      "description": "Central security screening checkpoint for all Terminal 1 departures.",
+      "opening_hours": "04:00 - 23:30 daily",
+      "directions": "After checking in, proceed straight ahead past the departures boards to the security entrance.",
+      "accessibility": "Accessible lane available. Staff trained to assist passengers with reduced mobility.",
+      "related_facilities": [
+        "checkin_t1_intl",
+        "information_desk_t1"
+      ],
+      "contact": null,
+      "visual_description": "security checkpoint sign, x-ray scanner and metal detector gate, security control signage with guard symbol",
+      "keywords": [
+        "security",
+        "screening",
+        "checkpoint",
+        "control",
+        "terminal 1",
+        "x-ray"
+      ]
+    },
+    {
+      "id": "information_desk_t1",
+      "name": "Terminal 1 Information Desk",
+      "category": "information_desk",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, Departures Hall (centre)",
+      "description": "Staffed information desk providing general help, directions, and flight guidance in Terminal 1.",
+      "opening_hours": "06:00 - 22:00 daily",
+      "directions": "Located in the centre of the Terminal 1 departures hall, beneath the main flight information display.",
+      "accessibility": "Level access. Hearing loop installed. Multilingual staff where available.",
+      "related_facilities": [
+        "checkin_t1_intl",
+        "special_assistance_t1"
+      ],
+      "contact": "+00 000 100 200",
+      "visual_description": "information desk sign with letter i symbol, help desk counter, airport information point signage",
+      "keywords": [
+        "information",
+        "info desk",
+        "help",
+        "assistance",
+        "terminal 1",
+        "directions"
+      ]
+    },
+    {
+      "id": "information_desk_t2",
+      "name": "Terminal 2 Information Desk",
+      "category": "information_desk",
+      "terminal": "Terminal 2",
+      "floor_or_zone": "Floor 1, Arrivals (centre)",
+      "description": "Staffed information desk for Terminal 2 passengers.",
+      "opening_hours": "06:00 - 22:00 daily",
+      "directions": "In the centre of the Terminal 2 arrivals area, opposite the exit doors.",
+      "accessibility": "Level access. Hearing loop installed.",
+      "related_facilities": [
+        "lounge_t2",
+        "special_assistance_t1"
+      ],
+      "contact": "+00 000 100 201",
+      "visual_description": "information point sign with i symbol, help desk, customer service counter signage",
+      "keywords": [
+        "information",
+        "info desk",
+        "help",
+        "assistance",
+        "terminal 2",
+        "directions"
+      ]
+    },
+    {
+      "id": "lounge_t2",
+      "name": "Skyview Lounge (Terminal 2)",
+      "category": "lounge",
+      "terminal": "Terminal 2",
+      "floor_or_zone": "Floor 3, Zone C",
+      "description": "Premium passenger lounge near the international gates in Terminal 2, with seating, food, and quiet areas.",
+      "opening_hours": "05:00 - 23:00 daily",
+      "directions": "After security in Terminal 2, take the elevator to Floor 3 and follow signs to Zone C. The lounge entrance is on the left.",
+      "accessibility": "Step-free access. Accessible restroom inside the lounge.",
+      "related_facilities": [
+        "gate_c22",
+        "restaurant_t2"
+      ],
+      "contact": "+00 000 100 300",
+      "visual_description": "airport lounge sign, comfortable seating area with armchairs, premium lounge entrance signage",
+      "keywords": [
+        "lounge",
+        "premium",
+        "rest",
+        "relax",
+        "terminal 2",
+        "zone c",
+        "seating"
+      ]
+    },
+    {
+      "id": "restaurant_t2",
+      "name": "Terminal 2 Food Court",
+      "category": "restaurant",
+      "terminal": "Terminal 2",
+      "floor_or_zone": "Floor 2, Central",
+      "description": "Food court with several restaurants and cafes in Terminal 2.",
+      "opening_hours": "06:00 - 22:00 daily",
+      "directions": "On Floor 2 of Terminal 2, in the central area between Zone B and Zone C.",
+      "accessibility": "Level access. Accessible seating available at all outlets.",
+      "related_facilities": [
+        "lounge_t2",
+        "restroom_b"
+      ],
+      "contact": null,
+      "visual_description": "restaurant and food court sign, dining area with tables, fork and knife restaurant symbol",
+      "keywords": [
+        "restaurant",
+        "food",
+        "food court",
+        "dining",
+        "eat",
+        "terminal 2",
+        "cafe"
+      ]
+    },
+    {
+      "id": "restroom_b",
+      "name": "Restroom Zone B (Terminal 1)",
+      "category": "restroom",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 2, Zone B",
+      "description": "Public restrooms in Zone B near the departure gates.",
+      "opening_hours": "Open 24 hours",
+      "directions": "Near Gate B12, follow the restroom symbols. Located beside the seating area.",
+      "accessibility": "Accessible restroom with grab rails and baby-changing facilities.",
+      "related_facilities": [
+        "gate_b12"
+      ],
+      "contact": null,
+      "visual_description": "restroom toilet symbol, male and female restroom sign, accessible toilet wheelchair symbol",
+      "keywords": [
+        "restroom",
+        "toilet",
+        "wc",
+        "bathroom",
+        "terminal 1",
+        "zone b",
+        "baby changing"
+      ]
+    },
+    {
+      "id": "prayer_room_t1",
+      "name": "Multi-Faith Prayer Room (Terminal 1)",
+      "category": "prayer_room",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, near Information Desk",
+      "description": "Quiet multi-faith prayer and reflection room open to all passengers.",
+      "opening_hours": "Open 24 hours",
+      "directions": "From the Terminal 1 information desk, walk towards the east corridor. The prayer room is signposted on the right.",
+      "accessibility": "Step-free access. Ablution facilities available.",
+      "related_facilities": [
+        "information_desk_t1"
+      ],
+      "contact": null,
+      "visual_description": "prayer room sign, multi-faith room symbol, quiet reflection room signage",
+      "keywords": [
+        "prayer",
+        "prayer room",
+        "multi-faith",
+        "reflection",
+        "quiet",
+        "terminal 1",
+        "worship"
+      ]
+    },
+    {
+      "id": "lost_and_found",
+      "name": "Lost and Found Office",
+      "category": "lost_and_found",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 0, Arrivals",
+      "description": "Office handling lost property reports and recovered items for both terminals.",
+      "opening_hours": "08:00 - 20:00 daily",
+      "directions": "In the Terminal 1 arrivals area, next to the baggage claim hall exit.",
+      "accessibility": "Level access. Assistance available on request.",
+      "related_facilities": [
+        "baggage_claim_t1",
+        "information_desk_t1"
+      ],
+      "contact": "+00 000 100 400",
+      "visual_description": "lost and found office sign, lost property counter, question mark help symbol",
+      "keywords": [
+        "lost",
+        "found",
+        "lost and found",
+        "lost property",
+        "missing",
+        "terminal 1"
+      ]
+    },
+    {
+      "id": "customs_t1",
+      "name": "Terminal 1 Customs",
+      "category": "customs",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 0, Arrivals",
+      "description": "Customs and passport control for Terminal 1 arrivals.",
+      "opening_hours": "Open 24 hours",
+      "directions": "Follow the 'Arrivals' and 'Passport Control' signs after leaving the aircraft. Customs is after passport checks.",
+      "accessibility": "Step-free access. Dedicated assistance lane available.",
+      "related_facilities": [
+        "baggage_claim_t1"
+      ],
+      "contact": null,
+      "visual_description": "customs sign, passport control booth, border control signage",
+      "keywords": [
+        "customs",
+        "passport",
+        "passport control",
+        "border",
+        "immigration",
+        "terminal 1",
+        "arrivals"
+      ]
+    },
+    {
+      "id": "currency_exchange_t1",
+      "name": "Currency Exchange (Terminal 1)",
+      "category": "currency_exchange",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, Departures Hall",
+      "description": "Currency exchange and ATM services in Terminal 1.",
+      "opening_hours": "06:00 - 22:00 daily",
+      "directions": "Near the Terminal 1 information desk, beside the entrance to security.",
+      "accessibility": "Level access. Lowered counter available.",
+      "related_facilities": [
+        "information_desk_t1"
+      ],
+      "contact": null,
+      "visual_description": "currency exchange sign, foreign exchange bureau, money exchange and ATM symbol",
+      "keywords": [
+        "currency",
+        "exchange",
+        "money",
+        "atm",
+        "foreign exchange",
+        "terminal 1",
+        "cash"
+      ]
+    },
+    {
+      "id": "special_assistance_t1",
+      "name": "Special Assistance Desk (Terminal 1)",
+      "category": "special_assistance",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, Departures Hall",
+      "description": "Desk providing mobility assistance and support for passengers with reduced mobility or disabilities.",
+      "opening_hours": "04:00 - 23:00 daily",
+      "directions": "At the entrance of the Terminal 1 departures hall, to the left of the main doors.",
+      "accessibility": "Fully accessible. Wheelchair service, guided assistance, and hearing support available.",
+      "related_facilities": [
+        "information_desk_t1",
+        "checkin_t1_intl"
+      ],
+      "contact": "+00 000 100 500",
+      "visual_description": "special assistance sign, wheelchair accessibility symbol, disability support desk signage",
+      "keywords": [
+        "special assistance",
+        "accessibility",
+        "wheelchair",
+        "disability",
+        "mobility",
+        "support",
+        "terminal 1"
+      ]
+    },
+    {
+      "id": "train_station",
+      "name": "Airport Train Station",
+      "category": "transport",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor -1, Transport Level",
+      "description": "Underground train station connecting the airport to the city centre.",
+      "opening_hours": "05:00 - 00:30 daily",
+      "directions": "Take the elevator or escalator down to the Transport Level (Floor -1) from the Terminal 1 arrivals hall. Follow the train symbols.",
+      "accessibility": "Step-free access via elevators to all platforms. Tactile paving installed.",
+      "related_facilities": [
+        "taxi_pickup",
+        "information_desk_t1"
+      ],
+      "contact": "+00 000 100 600",
+      "visual_description": "train station sign, railway platform symbol, airport rail link signage",
+      "keywords": [
+        "train",
+        "rail",
+        "station",
+        "transport",
+        "city centre",
+        "metro",
+        "connection"
+      ]
+    },
+    {
+      "id": "taxi_pickup",
+      "name": "Taxi Pickup Zone",
+      "category": "transport",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 0, Arrivals Exit",
+      "description": "Official taxi rank located outside the Terminal 1 arrivals exit.",
+      "opening_hours": "Open 24 hours",
+      "directions": "Exit the Terminal 1 arrivals hall through the main doors. The taxi rank is directly outside under the canopy.",
+      "accessibility": "Level access. Accessible taxis available on request at the taxi marshal point.",
+      "related_facilities": [
+        "train_station",
+        "baggage_claim_t1"
+      ],
+      "contact": "+00 000 100 600",
+      "visual_description": "taxi sign, taxi pickup zone signage, car and taxi rank symbol",
+      "keywords": [
+        "taxi",
+        "cab",
+        "pickup",
+        "transport",
+        "rank",
+        "arrivals",
+        "terminal 1"
+      ]
+    }
+  ]
+}

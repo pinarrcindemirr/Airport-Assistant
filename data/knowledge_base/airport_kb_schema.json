@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airport Knowledge Base Schema",
+  "description": "Schema for the airport passenger assistance knowledge base. Defines the structure of each airport record used by the chatbot's retrieval components. The knowledge base is a structured lookup resource, not a trained model.",
+  "type": "object",
+  "required": ["airport_name", "records"],
+  "properties": {
+    "airport_name": {
+      "type": "string",
+      "description": "Name of the (fictional) airport."
+    },
+    "airport_code": {
+      "type": "string",
+      "description": "Short airport code."
+    },
+    "knowledge_base_description": {
+      "type": "string",
+      "description": "Top-level note describing the data source and its synthetic nature. Renamed from 'description' to avoid confusion with the per-record 'description' field."
+    },
+    "records": {
+      "type": "array",
+      "minItems": 15,
+      "description": "List of airport location/service records. At least 15 required by the brief; 20 provided.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "category",
+          "terminal",
+          "floor_or_zone",
+          "description",
+          "opening_hours",
+          "directions",
+          "accessibility",
+          "related_facilities",
+          "keywords",
+          "visual_description"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier (slug). Used as the retrieval target and to link related_facilities. Justification: stable key independent of display name."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable location or service name. Justification: shown to the passenger in the response."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "gate",
+              "check_in",
+              "baggage_claim",
+              "security",
+              "information_desk",
+              "lounge",
+              "restaurant",
+              "restroom",
+              "prayer_room",
+              "lost_and_found",
+              "customs",
+              "currency_exchange",
+              "special_assistance",
+              "transport"
+            ],
+            "description": "Service category. Justification: enables intent-to-category matching and image-category matching; drives class-distribution analysis."
+          },
+          "terminal": {
+            "type": "string",
+            "description": "Terminal the record belongs to (Terminal 1 or Terminal 2). Justification: supports queries like 'lounge near terminal 2'."
+          },
+          "floor_or_zone": {
+            "type": "string",
+            "description": "Floor and zone within the terminal. Justification: needed for precise direction generation."
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the location/service. Justification: provides the textual content used for semantic retrieval and the response body."
+          },
+          "opening_hours": {
+            "type": "string",
+            "description": "Opening hours or availability. Justification: required field for the response; supports 'opening hours' intent."
+          },
+          "directions": {
+            "type": "string",
+            "description": "Step-by-step direction text. Justification: the core navigational answer the chatbot returns."
+          },
+          "accessibility": {
+            "type": "string",
+            "description": "Accessibility information. Justification: directly supports the brief's accessibility and ethics requirements."
+          },
+          "related_facilities": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List of related record ids. Justification: enables 'related facilities' recommendations and graph-like navigation."
+          },
+          "keywords": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Short list of search keywords/synonyms for the record. Justification: supports a lightweight keyword-matching signal alongside semantic retrieval, and aids vocabulary/intent analysis. Curated to stay in sync with the record content."
+          },
+          "contact": {
+            "type": ["string", "null"],
+            "description": "Emergency or assistance contact where appropriate, otherwise null. Justification: human handover and critical-info redirection."
+          },
+          "visual_description": {
+            "type": "string",
+            "description": "Textual description of how this place/sign looks. Justification: bridges the image (CLIP) pipeline to the knowledge base by embedding visual cues into the shared semantic space. Note: this field alone is embedded by CLIP; the text pipeline uses a separate combined text derived at runtime from name + description + directions + location."
+          }
+        }
+      }
+    }
+  }
+}
