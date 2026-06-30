@@ -39,4 +39,4 @@ streamlit run app/streamlit_app.py
 
 ## License
 
-MIT
+MIT 
