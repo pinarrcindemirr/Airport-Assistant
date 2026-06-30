@@ -1,0 +1,36 @@
+# Core ML
+torch
+torchvision
+transformers
+sentence-transformers
+
+# Image
+ftfy
+regex
+pillow
+opencv-python
+
+# CLIP & retrieval
+git+https://github.com/openai/CLIP.git
+faiss-cpu
+
+# Audio
+openai-whisper
+librosa
+soundfile
+
+# NLP
+spacy
+
+# Evaluation
+scikit-learn
+jiwer
+pandas
+numpy
+matplotlib
+
+# Interface
+streamlit
+
+# Testing
+pytest
