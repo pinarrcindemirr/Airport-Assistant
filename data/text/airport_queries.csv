@@ -1,0 +1,51 @@
+query_id,query,intent,expected_category,acceptable_ids,difficulty
+q01,where is gate B12,find_gate,gate,gate_b12,easy
+q02,how do I get to my gate,find_gate,gate,gate_b12|gate_a05|gate_c22,easy
+q03,which way to the gates,find_gate,gate,gate_b12|gate_a05|gate_c22,easy
+q04,im at the gate but cant find it lol,find_gate,gate,gate_b12|gate_a05|gate_c22,hard
+q05,gate for TK1980,find_gate,gate,gate_b12|gate_a05|gate_c22,hard
+q06,where do I pick up my luggage,find_baggage,baggage_claim,baggage_claim_t1|baggage_claim_t2,easy
+q07,baggage claim location,find_baggage,baggage_claim,baggage_claim_t1|baggage_claim_t2,easy
+q08,my suitcase didnt come out what do I do,find_baggage,lost_and_found,lost_and_found|baggage_claim_t1|baggage_claim_t2,hard
+q09,lost bag help,find_baggage,lost_and_found,lost_and_found,easy
+q10,where can I collect my bags after landing,find_baggage,baggage_claim,baggage_claim_t1|baggage_claim_t2,easy
+q11,is there a lounge here,find_lounge,lounge,lounge_t2,easy
+q12,where is the business lounge,find_lounge,lounge,lounge_t2,easy
+q13,can I rest somewhere quiet before my flight,find_lounge,lounge,lounge_t2,hard
+q14,priority pass lounge location,find_lounge,lounge,lounge_t2,hard
+q15,where do I check in,find_checkin,check_in,checkin_t1_intl|checkin_t1_domestic,easy
+q16,which counter for turkish airlines,find_checkin,check_in,checkin_t1_intl|checkin_t1_domestic,hard
+q17,check in desk for my flight,find_checkin,check_in,checkin_t1_intl|checkin_t1_domestic,easy
+q18,where do I drop my bags before security,find_checkin,check_in,checkin_t1_intl|checkin_t1_domestic,hard
+q19,im hungry where can I eat,find_food,restaurant,restaurant_t2,easy
+q20,any restaurants after security,find_food,restaurant,restaurant_t2,easy
+q21,coffee near gate A,find_food,restaurant,restaurant_t2,hard
+q22,somewhere to grab a quick bite,find_food,restaurant,restaurant_t2,hard
+q23,where are the toilets,find_restroom,restroom,restroom_b,easy
+q24,nearest bathroom,find_restroom,restroom,restroom_b,easy
+q25,where can I get cash,find_currency,currency_exchange,currency_exchange_t1,easy
+q26,is there an atm in the terminal,find_currency,currency_exchange,currency_exchange_t1,easy
+q27,need to withdraw money,find_currency,currency_exchange,currency_exchange_t1,hard
+q28,how do I connect to wifi,find_wifi,out_of_scope,none,easy
+q29,is the airport wifi free,find_wifi,out_of_scope,none,easy
+q30,whats the wifi password,find_wifi,out_of_scope,none,hard
+q31,is my flight on time,flight_status,out_of_scope,none,easy
+q32,flight TK1980 status,flight_status,out_of_scope,none,easy
+q33,has my flight been delayed,flight_status,out_of_scope,none,easy
+q34,which gate for my flight,find_gate,gate,gate_b12|gate_a05|gate_c22,hard
+q35,how do I get to the city center,find_transport,transport,train_station|taxi_pickup,easy
+q36,is there a train to downtown,find_transport,transport,train_station,easy
+q37,taxi or metro whats faster to city,find_transport,transport,train_station|taxi_pickup,hard
+q38,where do I catch the airport bus,find_transport,transport,train_station|taxi_pickup,hard
+q39,where is passport control,find_customs,customs,customs_t1,easy
+q40,how long is the security line,find_security,security,security_t1,hard
+q41,where do I go through customs,find_customs,customs,customs_t1,easy
+q42,is there a pharmacy in the airport,find_pharmacy,out_of_scope,none,easy
+q43,i need to charge my phone,find_charging,out_of_scope,none,easy
+q44,where can I plug in my laptop,find_charging,out_of_scope,none,hard
+q45,is there a prayer room,find_prayer_room,prayer_room,prayer_room_t1,easy
+q46,where can I pray,find_prayer_room,prayer_room,prayer_room_t1,hard
+q47,i lost my passport who do I talk to,find_help_desk,lost_and_found,lost_and_found|information_desk_t1|information_desk_t2,hard
+q48,where is the information desk,find_help_desk,information_desk,information_desk_t1|information_desk_t2,easy
+q49,help i missed my connection,find_help_desk,information_desk,information_desk_t1|information_desk_t2|special_assistance_t1,hard
+q50,where is the smoking area,find_smoking,out_of_scope,none,easy
