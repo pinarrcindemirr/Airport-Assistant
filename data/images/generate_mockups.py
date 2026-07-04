@@ -130,20 +130,20 @@ def _draw_arrow(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], color
 # wayfinding conventions (blue = general information/direction,
 # green = currency/money, warm tones = food, muted = premium/lounge).
 CATEGORY_STYLE = {
-    "gate":               "#0B3D91",
-    "check_in":           "#0B3D91",
-    "baggage_claim":      "#0B3D91",
-    "security":           "#1B1F3B",
-    "information_desk":   "#0B3D91",
-    "lounge":             "#5B2A6E",
-    "restaurant":         "#A8511B",
-    "restroom":           "#0B3D91",
-    "prayer_room":        "#2E6E62",
-    "lost_and_found":     "#4A4A4A",
-    "customs":            "#0B3D91",
-    "currency_exchange":  "#1E7A3C",
-    "special_assistance": "#0B3D91",
-    "transport":          "#0B3D91",
+    "gate":               "#0B3D91",  # blue - wayfinding/direction
+    "check_in":           "#0F6B99",  # teal-blue - distinct from gate's blue
+    "baggage_claim":      "#1B4F72",  # steel blue - distinct from gate/check_in
+    "security":           "#1B1F3B",  # near-black navy - authority/control
+    "information_desk":   "#2874A6",  # lighter blue - distinct cluster from gate
+    "lounge":             "#5B2A6E",  # purple - premium
+    "restaurant":         "#A8511B",  # warm orange/brown - food
+    "restroom":           "#3B7A8C",  # muted teal - utility
+    "prayer_room":        "#2E6E62",  # teal-green - calm/reflection
+    "lost_and_found":     "#4A4A4A",  # neutral grey
+    "customs":            "#154360",  # dark blue-grey - official/border control
+    "currency_exchange":  "#1E7A3C",  # green - money
+    "special_assistance": "#6C3483",  # violet - distinct accessibility colour
+    "transport":          "#117864",  # deep teal - distinct from all blues above
 }
 TEXT_COLOR = "#FFFFFF"
 DEFAULT_BG = "#0B3D91"
