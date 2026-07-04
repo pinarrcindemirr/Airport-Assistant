@@ -32,7 +32,7 @@ class Answer:
 class TextRetriever:
     """Embeds the KB once, then answers queries against it."""
 
-    def __init__(self, embedder: TextEmbedder, include_keywords: bool = False):
+    def __init__(self, embedder: TextEmbedder, include_keywords: bool = True):
         self.embedder = embedder
         self.include_keywords = include_keywords
         self.ids, self.matrix = embedder.embed_kb(include_keywords=include_keywords)
