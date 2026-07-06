@@ -1,0 +1,16 @@
+audio_id,filename,expected_text,intent,difficulty,condition
+a01,a01.m4a,where is gate B12,find_gate,easy,quiet
+a02,a02.m4a,im at the gate but cant find it,find_gate,hard,quiet
+a03,a03.m4a,where do I pick up my luggage,find_baggage,easy,quiet
+a04,a04.m4a,my suitcase didnt come out what do I do,find_baggage,hard,quiet
+a05,a05.m4a,is there a lounge here,find_lounge,easy,quiet
+a06,a06.m4a,can I rest somewhere quiet before my flight,find_lounge,hard,quiet
+a07,a07.m4a,where do I check in,find_checkin,easy,quiet
+a08,a08.m4a,where do I drop my bags before security,find_checkin,hard,quiet
+a09,a09.m4a,im hungry where can I eat,find_food,easy,quiet
+a10,a10.m4a,coffee near gate A,find_food,hard,noisy
+a11,a11.m4a,where can I get cash,find_currency,easy,quiet
+a12,a12.m4a,is my flight on time,flight_status,easy,quiet
+a13,a13.m4a,where is passport control,find_customs,easy,noisy
+a14,a14.m4a,is there a pharmacy in the airport,find_pharmacy,easy,quiet
+a15,a15.m4a,i lost my passport who do I talk to,find_help_desk,hard,fast
