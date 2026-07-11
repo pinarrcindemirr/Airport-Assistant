@@ -79,3 +79,11 @@ data\images\transport\taxi_pickup_v1.png,taxi_pickup,transport,reference,clean
 data\images\transport\taxi_pickup_v2_angle.png,taxi_pickup,transport,query,angle
 data\images\transport\taxi_pickup_v3_dark.png,taxi_pickup,transport,query,dark
 data\images\transport\taxi_pickup_v4_blur.png,taxi_pickup,transport,query,blur
+data\images\pharmacy\pharmacy_t1_v1.png,pharmacy_t1,pharmacy,reference,clean
+data\images\pharmacy\pharmacy_t1_v2_angle.png,pharmacy_t1,pharmacy,query,angle
+data\images\pharmacy\pharmacy_t1_v3_dark.png,pharmacy_t1,pharmacy,query,dark
+data\images\pharmacy\pharmacy_t1_v4_blur.png,pharmacy_t1,pharmacy,query,blur
+data\images\smoking_area\smoking_area_t1_v1.png,smoking_area_t1,smoking_area,reference,clean
+data\images\smoking_area\smoking_area_t1_v2_angle.png,smoking_area_t1,smoking_area,query,angle
+data\images\smoking_area\smoking_area_t1_v3_dark.png,smoking_area_t1,smoking_area,query,dark
+data\images\smoking_area\smoking_area_t1_v4_blur.png,smoking_area_t1,smoking_area,query,blur

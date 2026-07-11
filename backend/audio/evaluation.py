@@ -18,18 +18,16 @@ Run:  python -m backend.audio.evaluation
 
 from __future__ import annotations
 
-import csv
-from collections import defaultdict
+import re
 from pathlib import Path
+
+import pandas as pd
 
 from backend.audio.whisper_model import SpeechTranscriber
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 DEFAULT_MANIFEST = ROOT_DIR / "data" / "audio" / "audio_queries.csv"
 DEFAULT_AUDIO_ROOT = ROOT_DIR / "data" / "audio" / "raw"
-
-
-import re
 
 
 def _normalize(text: str) -> list[str]:
@@ -75,14 +73,13 @@ def _word_error_rate(reference: str, hypothesis: str) -> float:
 
 
 def load_manifest(path: str | Path = DEFAULT_MANIFEST) -> list[dict]:
-    with open(path, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+    """Read the recording manifest with pandas; returned as list[dict] for existing callers."""
+    return pd.read_csv(path, dtype=str, keep_default_na=False).to_dict(orient="records")
 
 
 def evaluate(transcriber: SpeechTranscriber, manifest_path: str | Path = DEFAULT_MANIFEST,
              audio_root: str | Path = DEFAULT_AUDIO_ROOT) -> tuple[dict, list[dict]]:
     rows = load_manifest(manifest_path)
-    per_condition = defaultdict(list)  # condition -> list of WER values
     results = []
 
     for row in rows:
@@ -91,7 +88,6 @@ def evaluate(transcriber: SpeechTranscriber, manifest_path: str | Path = DEFAULT
         hypothesis = transcription.text
         wer = _word_error_rate(row["expected_text"], hypothesis)
 
-        per_condition[row["condition"]].append(wer)
         results.append({
             "audio_id": row["audio_id"],
             "intent": row["intent"],
@@ -104,31 +100,32 @@ def evaluate(transcriber: SpeechTranscriber, manifest_path: str | Path = DEFAULT
             "answered": transcription.answered,
         })
 
-    summary = {cond: sum(values) / len(values) for cond, values in per_condition.items()}
-    all_wer = [r["wer"] for r in results]
-    summary["overall"] = sum(all_wer) / len(all_wer) if all_wer else float("nan")
+    df = pd.DataFrame(results)
+    summary = df.groupby("condition")["wer"].mean().to_dict()  # per-condition mean WER
+    summary["overall"] = df["wer"].mean()
     return summary, results
 
 
 def _print_report(summary: dict, results: list[dict]) -> None:
+    df = pd.DataFrame(results)
+
     print("Speech pipeline evaluation (Word Error Rate - lower is better)\n")
     for cond, wer in summary.items():
         if cond == "overall":
             continue
-        n = sum(1 for r in results if r["condition"] == cond)
+        n = (df["condition"] == cond).sum()
         print(f"  {cond:<10} WER={wer:.3f}  (n={n})")
-    print(f"  {'overall':<10} WER={summary['overall']:.3f}  (n={len(results)})")
+    print(f"  {'overall':<10} WER={summary['overall']:.3f}  (n={len(df)})")
 
-    correct = [r for r in results if r["wer"] == 0]
-    incorrect = [r for r in results if r["wer"] > 0]
+    correct = df[df["wer"] == 0]
+    incorrect = df[df["wer"] > 0]
     print(f"\nConfidence distribution (avg_logprob - needed to calibrate AUDIO_CONFIDENCE_THRESHOLD):")
     for label, group in (("correct  ", correct), ("incorrect", incorrect)):
-        if not group:
+        if group.empty:
             print(f"  {label} predictions: n=0")
             continue
-        vals = [r["avg_logprob"] for r in group]
-        print(f"  {label} predictions: n={len(vals):<3} min={min(vals):.3f}  "
-              f"mean={sum(vals)/len(vals):.3f}  max={max(vals):.3f}")
+        print(f"  {label} predictions: n={len(group):<3} min={group['avg_logprob'].min():.3f}  "
+              f"mean={group['avg_logprob'].mean():.3f}  max={group['avg_logprob'].max():.3f}")
 
     print("\nPer-example transcriptions:")
     for r in results:

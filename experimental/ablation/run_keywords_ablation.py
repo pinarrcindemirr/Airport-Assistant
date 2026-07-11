@@ -25,8 +25,9 @@ Run:  python -m experimental.ablation.run_keywords_ablation
 
 from __future__ import annotations
 
-import csv
 from pathlib import Path
+
+import pandas as pd
 
 from backend.utils.config import KB_DIR, CONFIDENCE_THRESHOLD, TOP_K
 from backend.text.embeddings import TextEmbedder
@@ -36,39 +37,41 @@ QUERIES_PATH = KB_DIR.parent / "text" / "airport_queries.csv"
 
 
 def load_queries(path: Path = QUERIES_PATH) -> list[dict]:
-    """Read the query set; split acceptable_ids into a set ('none' -> empty)."""
-    rows = []
-    with open(path, newline="", encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            ids = row["acceptable_ids"].strip()
-            row["acceptable_set"] = set() if ids == "none" else set(ids.split("|"))
-            row["in_scope"] = bool(row["acceptable_set"])
-            rows.append(row)
-    return rows
+    """
+    Read the query set with pandas, split acceptable_ids into a set ('none'
+    -> empty), and return a list of dicts (not a DataFrame) so existing
+    callers - evaluate() below, and experimental/ablation/show_errors.py -
+    keep working unchanged; pandas is used for the read/transform step only.
+    """
+    df = pd.read_csv(path, dtype=str, keep_default_na=False)
+    df["acceptable_set"] = df["acceptable_ids"].str.strip().apply(
+        lambda ids: set() if ids == "none" else set(ids.split("|"))
+    )
+    df["in_scope"] = df["acceptable_set"].apply(bool)
+    return df.to_dict(orient="records")
 
 
 def evaluate(retriever: TextRetriever, queries: list[dict], top_k: int = TOP_K) -> dict:
-    """Score one retriever variant over all queries."""
+    """Score one retriever variant over all queries, aggregating with pandas."""
     in_scope = [q for q in queries if q["in_scope"]]
     oos = [q for q in queries if not q["in_scope"]]
 
-    hit1 = recall_k = rr_sum = 0
-    hit1_by_diff = {"easy": [0, 0], "hard": [0, 0]}  # [hits, total]
-
+    per_query_rows = []
     for q in in_scope:
         cands = retriever.search(q["query"], top_k=top_k)
         ranked_ids = [c.record_id for c in cands]
         acc = q["acceptable_set"]
 
-        is_hit1 = ranked_ids[0] in acc
-        hit1 += int(is_hit1)
-        recall_k += int(any(rid in acc for rid in ranked_ids))
         rank = next((i + 1 for i, rid in enumerate(ranked_ids) if rid in acc), None)
-        rr_sum += (1.0 / rank) if rank else 0.0
+        per_query_rows.append({
+            "difficulty": q["difficulty"],
+            "hit1": ranked_ids[0] in acc,
+            "hitk": any(rid in acc for rid in ranked_ids),
+            "reciprocal_rank": (1.0 / rank) if rank else 0.0,
+        })
 
-        bucket = hit1_by_diff[q["difficulty"]]
-        bucket[0] += int(is_hit1)
-        bucket[1] += 1
+    df = pd.DataFrame(per_query_rows)
+    hit1_by_diff = df.groupby("difficulty")["hit1"].mean()  # one mean per difficulty level
 
     abstain_ok = sum(1 for q in oos if retriever.answer(q["query"]).top_score < CONFIDENCE_THRESHOLD)
 
@@ -76,12 +79,12 @@ def evaluate(retriever: TextRetriever, queries: list[dict], top_k: int = TOP_K) 
     return {
         "n_in_scope": n_in,
         "n_oos": len(oos),
-        "hit@1": hit1 / n_in,
-        f"recall@{top_k}": recall_k / n_in,
-        "MRR": rr_sum / n_in,
+        "hit@1": df["hit1"].mean(),
+        f"recall@{top_k}": df["hitk"].mean(),
+        "MRR": df["reciprocal_rank"].mean(),
         "abstain_acc": abstain_ok / len(oos) if oos else float("nan"),
-        "hit@1_easy": hit1_by_diff["easy"][0] / max(1, hit1_by_diff["easy"][1]),
-        "hit@1_hard": hit1_by_diff["hard"][0] / max(1, hit1_by_diff["hard"][1]),
+        "hit@1_easy": hit1_by_diff.get("easy", float("nan")),
+        "hit@1_hard": hit1_by_diff.get("hard", float("nan")),
     }
 
 

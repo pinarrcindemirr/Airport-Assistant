@@ -40,7 +40,7 @@ q38,where do I catch the airport bus,find_transport,transport,train_station|taxi
 q39,where is passport control,find_customs,customs,customs_t1,easy
 q40,how long is the security line,find_security,security,security_t1,hard
 q41,where do I go through customs,find_customs,customs,customs_t1,easy
-q42,is there a pharmacy in the airport,find_pharmacy,out_of_scope,none,easy
+q42,is there a pharmacy in the airport,find_pharmacy,pharmacy,pharmacy_t1,easy
 q43,i need to charge my phone,find_charging,out_of_scope,none,easy
 q44,where can I plug in my laptop,find_charging,out_of_scope,none,hard
 q45,is there a prayer room,find_prayer_room,prayer_room,prayer_room_t1,easy
@@ -48,4 +48,36 @@ q46,where can I pray,find_prayer_room,prayer_room,prayer_room_t1,hard
 q47,i lost my passport who do I talk to,find_help_desk,lost_and_found,lost_and_found|information_desk_t1|information_desk_t2,hard
 q48,where is the information desk,find_help_desk,information_desk,information_desk_t1|information_desk_t2,easy
 q49,help i missed my connection,find_help_desk,information_desk,information_desk_t1|information_desk_t2|special_assistance_t1,hard
-q50,where is the smoking area,find_smoking,out_of_scope,none,easy
+q50,where is the smoking area,find_smoking,smoking_area,smoking_area_t1,easy
+q51,how much is the exchange rate here,find_currency,currency_exchange,currency_exchange_t1,hard
+q52,i need to change euros to pounds,find_currency,currency_exchange,currency_exchange_t1,easy
+q53,how do i get on the internet here,find_wifi,out_of_scope,none,hard
+q54,my phone has no connection is there network,find_wifi,out_of_scope,none,hard
+q55,when does boarding start for my flight,flight_status,out_of_scope,none,easy
+q56,did the 3pm flight leave already,flight_status,out_of_scope,none,hard
+q57,i have a question who can help me,find_help_desk,information_desk,information_desk_t1|information_desk_t2,easy
+q58,is there anyone who speaks english to assist me,find_help_desk,information_desk,information_desk_t1|information_desk_t2,hard
+q59,i need to use the toilet urgently,find_restroom,restroom,restroom_b,easy
+q60,is there a baby changing room,find_restroom,restroom,restroom_b,hard
+q61,where can i freshen up,find_restroom,restroom,restroom_b,hard
+q62,do i need to declare anything at customs,find_customs,customs,customs_t1,easy
+q63,where do they check passports for arrivals,find_customs,customs,customs_t1,easy
+q64,which line is for non eu citizens,find_customs,customs,customs_t1,hard
+q65,is there a power outlet around here,find_charging,out_of_scope,none,easy
+q66,my battery is dying help,find_charging,out_of_scope,none,hard
+q67,usb charging point nearby,find_charging,out_of_scope,none,easy
+q68,where can i go to pray before my flight,find_prayer_room,prayer_room,prayer_room_t1,easy
+q69,is there a chapel or mosque in the terminal,find_prayer_room,prayer_room,prayer_room_t1,easy
+q70,i need a quiet place for worship,find_prayer_room,prayer_room,prayer_room_t1,hard
+q71,how strict is the liquid rule at screening,find_security,security,security_t1,hard
+q72,do i have to take my laptop out at security,find_security,security,security_t1,easy
+q73,where is the security check for departures,find_security,security,security_t1,easy
+q74,can i bring this bottle through the checkpoint,find_security,security,security_t1,hard
+q75,i need painkillers where can i buy some,find_pharmacy,pharmacy,pharmacy_t1,easy
+q76,do they sell medicine anywhere here,find_pharmacy,pharmacy,pharmacy_t1,easy
+q77,i forgot my blood pressure pills is there a chemist,find_pharmacy,pharmacy,pharmacy_t1,hard
+q78,my child has a fever i need medication,find_pharmacy,pharmacy,pharmacy_t1,hard
+q79,where am i allowed to smoke,find_smoking,smoking_area,smoking_area_t1,easy
+q80,is there a smoking lounge after security,find_smoking,smoking_area,smoking_area_t1,easy
+q81,can i vape anywhere in the terminal,find_smoking,smoking_area,smoking_area_t1,hard
+q82,designated smoking zone location,find_smoking,smoking_area,smoking_area_t1,easy

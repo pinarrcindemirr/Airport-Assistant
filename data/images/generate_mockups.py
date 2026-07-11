@@ -144,6 +144,8 @@ CATEGORY_STYLE = {
     "currency_exchange":  "#1E7A3C",  # green - money
     "special_assistance": "#6C3483",  # violet - distinct accessibility colour
     "transport":          "#117864",  # deep teal - distinct from all blues above
+    "pharmacy":           "#0E8A4F",  # pharmacy green (green-cross convention) - distinct from currency's darker green
+    "smoking_area":       "#7A5C3E",  # warm grey-brown - unlike any other category colour
 }
 TEXT_COLOR = "#FFFFFF"
 DEFAULT_BG = "#0B3D91"
@@ -215,6 +217,16 @@ def _icon(draw: ImageDraw.ImageDraw, category: str, cx: int, cy: int, s: int) ->
         draw.rounded_rectangle([cx - s, cy - s * 0.4, cx + s, cy + s * 0.5], radius=10, outline=c, width=6)
         draw.ellipse([cx - s * 0.7, cy + s * 0.4, cx - s * 0.3, cy + s * 0.8], outline=c, width=5)
         draw.ellipse([cx + s * 0.3, cy + s * 0.4, cx + s * 0.7, cy + s * 0.8], outline=c, width=5)
+    elif category == "pharmacy":
+        # green-cross pharmacy symbol: two overlapping bars forming a plus
+        bar = s * 0.35
+        draw.rectangle([cx - bar, cy - s, cx + bar, cy + s], fill=c)
+        draw.rectangle([cx - s, cy - bar, cx + s, cy + bar], fill=c)
+    elif category == "smoking_area":
+        # simple cigarette: a long horizontal bar with a lit tip and smoke curve
+        draw.rectangle([cx - s, cy - s * 0.15, cx + s * 0.7, cy + s * 0.15], outline=c, width=5)
+        draw.rectangle([cx + s * 0.7, cy - s * 0.15, cx + s, cy + s * 0.15], fill=c)
+        draw.arc([cx + s * 0.55, cy - s * 0.9, cx + s * 1.05, cy - s * 0.3], start=200, end=340, fill=c, width=4)
     else:
         draw.rectangle([cx - s, cy - s, cx + s, cy + s], outline=c, width=6)
 

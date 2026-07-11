@@ -14,8 +14,7 @@ Run:  python -m backend.image.evaluation
 
 from __future__ import annotations
 
-from collections import defaultdict
-
+import pandas as pd
 import torch
 
 from backend.image.embeddings import ImageEmbedder
@@ -30,11 +29,11 @@ def evaluate(retriever: ImageRetriever, batch_size: int = 8) -> tuple[dict, dict
     Run every image in data/images/image_labels.csv through the retriever in
     batches, compare the top prediction against the image's own record_id
     (ground truth: each generated image is a photo of exactly one record),
-    and aggregate accuracy per condition plus a list of concrete examples.
+    and aggregate accuracy per condition (via pandas groupby) plus a list of
+    concrete examples.
     """
     loader = build_dataloader(batch_size=batch_size)
-    per_condition = defaultdict(lambda: {"top1": 0, "top3": 0, "n": 0})
-    examples = {"correct": [], "incorrect": []}
+    rows = []
 
     for tensors, records in loader:
         image_embs = retriever.embedder.encode_images(tensors)          # (B, d)
@@ -43,34 +42,34 @@ def evaluate(retriever: ImageRetriever, batch_size: int = 8) -> tuple[dict, dict
         for row, rec in zip(sims, records):
             order = torch.argsort(row, descending=True)[:IMAGE_TOP_K]
             ranked_ids = [retriever.ids[i] for i in order.tolist()]
-            top1_hit = ranked_ids[0] == rec.record_id
-            top3_hit = rec.record_id in ranked_ids
-
-            bucket = per_condition[rec.condition]
-            bucket["top1"] += int(top1_hit)
-            bucket["top3"] += int(top3_hit)
-            bucket["n"] += 1
-
-            entry = {
-                "filename": rec.filename, "record_id": rec.record_id,
-                "condition": rec.condition, "predicted": ranked_ids[0],
+            rows.append({
+                "filename": rec.filename,
+                "record_id": rec.record_id,
+                "condition": rec.condition,
+                "predicted": ranked_ids[0],
                 "score": row[order[0]].item(),
-            }
-            (examples["correct"] if top1_hit else examples["incorrect"]).append(entry)
+                "top1_hit": ranked_ids[0] == rec.record_id,
+                "top3_hit": rec.record_id in ranked_ids,
+            })
 
-    summary = {
-        cond: {
-            "top1_accuracy": v["top1"] / v["n"],
-            "top3_accuracy": v["top3"] / v["n"],
-            "n": v["n"],
-        }
-        for cond, v in per_condition.items()
-    }
-    overall_n = sum(v["n"] for v in per_condition.values())
+    df = pd.DataFrame(rows)
+
+    # Per-condition and overall accuracy via a single groupby + mean.
+    grouped = df.groupby("condition").agg(
+        top1_accuracy=("top1_hit", "mean"),
+        top3_accuracy=("top3_hit", "mean"),
+        n=("top1_hit", "size"),
+    )
+    summary = {cond: row.to_dict() for cond, row in grouped.iterrows()}
     summary["overall"] = {
-        "top1_accuracy": sum(v["top1"] for v in per_condition.values()) / overall_n,
-        "top3_accuracy": sum(v["top3"] for v in per_condition.values()) / overall_n,
-        "n": overall_n,
+        "top1_accuracy": df["top1_hit"].mean(),
+        "top3_accuracy": df["top3_hit"].mean(),
+        "n": len(df),
+    }
+
+    examples = {
+        "correct": df[df["top1_hit"]].to_dict(orient="records"),
+        "incorrect": df[~df["top1_hit"]].to_dict(orient="records"),
     }
     return summary, examples
 
@@ -89,7 +88,7 @@ def _print_report(summary: dict, examples: dict) -> None:
         if cond not in summary:
             continue
         s = summary[cond]
-        print(f"{cond:<12}{s['top1_accuracy']:>10.3f}{s['top3_accuracy']:>10.3f}{s['n']:>6}")
+        print(f"{cond:<12}{s['top1_accuracy']:>10.3f}{s['top3_accuracy']:>10.3f}{int(s['n']):>6}")
 
     correct_scores = [e["score"] for e in examples["correct"]]
     incorrect_scores = [e["score"] for e in examples["incorrect"]]

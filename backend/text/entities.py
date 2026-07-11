@@ -53,6 +53,8 @@ SERVICE_KEYWORDS = {
     "special_assistance": ["wheelchair", "assistance", "disability", "mobility"],
     "transport": ["taxi", "train", "bus", "transport", "metro", "city centre", "city center", "downtown"],
     "information_desk": ["information desk", "info desk", "help desk", "information"],
+    "pharmacy": ["pharmacy", "chemist", "medicine", "medication", "painkillers"],
+    "smoking_area": ["smoking", "smoke", "cigarette", "vape"],
 }
 
 

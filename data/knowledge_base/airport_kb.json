@@ -518,6 +518,58 @@
         "arrivals",
         "terminal 1"
       ]
+    },
+    {
+      "id": "pharmacy_t1",
+      "name": "Terminal 1 Pharmacy",
+      "category": "pharmacy",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 1, Departures Hall",
+      "description": "Pharmacy selling medicine, painkillers, first-aid supplies, and travel health products in Terminal 1.",
+      "opening_hours": "07:00 - 21:00 daily",
+      "directions": "In the Terminal 1 departures hall, next to the currency exchange, before security.",
+      "accessibility": "Level access. Staff can assist with locating products.",
+      "related_facilities": [
+        "currency_exchange_t1",
+        "information_desk_t1"
+      ],
+      "contact": "+00 000 100 700",
+      "visual_description": "pharmacy sign with green cross symbol, chemist shop front, medicine store signage",
+      "keywords": [
+        "pharmacy",
+        "chemist",
+        "medicine",
+        "medication",
+        "painkillers",
+        "first aid",
+        "terminal 1"
+      ]
+    },
+    {
+      "id": "smoking_area_t1",
+      "name": "Terminal 1 Smoking Area",
+      "category": "smoking_area",
+      "terminal": "Terminal 1",
+      "floor_or_zone": "Floor 2, Zone B (outdoor terrace)",
+      "description": "Designated outdoor smoking terrace for passengers, located after security in Terminal 1.",
+      "opening_hours": "Open 24 hours",
+      "directions": "After security, follow signs to Zone B and take the stairs to the outdoor terrace next to the food court entrance.",
+      "accessibility": "Elevator access to the terrace level available.",
+      "related_facilities": [
+        "restaurant_t2",
+        "restroom_b"
+      ],
+      "contact": null,
+      "visual_description": "smoking area sign with cigarette symbol, designated smoking zone signage, outdoor smoking terrace",
+      "keywords": [
+        "smoking",
+        "smoking area",
+        "cigarette",
+        "vape",
+        "designated zone",
+        "terrace",
+        "terminal 1"
+      ]
     }
   ]
 }

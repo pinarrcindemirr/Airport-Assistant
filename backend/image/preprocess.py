@@ -2,10 +2,9 @@
 Image preprocessing pipeline for the CLIP-based vision component.
 
 Covers every subtask the brief asks for (image loading, resizing,
-normalisation, optional augmentation, conversion to tensors, batch loaders)
-using only Pillow and PyTorch - torchvision is deliberately not required,
-to keep the environment setup to the libraries already needed elsewhere in
-this project (sentence-transformers already depends on torch).
+normalisation, optional augmentation, conversion to tensors, batch loaders).
+Image loading uses OpenCV (see load_image()); the resize/normalise/tensor
+steps below still use PIL + plain PyTorch for now.
 
 Design note on augmentation and training:
   CLIP is used here as a FROZEN, pretrained model (per the brief - "Pretrained
@@ -26,6 +25,8 @@ import csv
 from dataclasses import dataclass
 from pathlib import Path
 
+import cv2
+import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image, ImageEnhance
@@ -42,8 +43,27 @@ DEFAULT_MANIFEST = ROOT_DIR / "data" / "images" / "image_labels.csv"
 
 
 def load_image(path: str | Path) -> Image.Image:
-    """Load an image file from disk, forcing RGB (drops alpha, fixes greyscale)."""
-    return Image.open(path).convert("RGB")
+    """
+    Load an image file from disk using OpenCV, forcing RGB.
+
+    OpenCV decodes images as BGR (blue-green-red) channel order by
+    convention, NOT RGB - every other library in this pipeline (PIL,
+    PyTorch, CLIP) expects RGB. Forgetting this conversion is a classic,
+    silent bug: the image "loads fine" and is the right shape, but every
+    colour is wrong, which quietly degrades a colour-sensitive model like
+    CLIP without raising any error. cv2.cvtColor here is what makes that
+    conversion explicit rather than accidental.
+
+    The result is wrapped back into a PIL Image (rather than staying a raw
+    NumPy array) so the rest of this module - augment(), and the resize/
+    tensor step - can keep working exactly as before regardless of which
+    library performed the initial read.
+    """
+    bgr = cv2.imread(str(path), cv2.IMREAD_COLOR)
+    if bgr is None:
+        raise FileNotFoundError(f"OpenCV could not read image: {path}")
+    rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+    return Image.fromarray(rgb)
 
 
 def resize_and_crop(img: Image.Image, size: int = CLIP_INPUT_SIZE) -> Image.Image:

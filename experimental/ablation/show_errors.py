@@ -1,9 +1,9 @@
 """
 Error analysis for the text retrieval pipeline.
 
-The ablation gives aggregate numbers (hit@1 = 0.875 etc.); this script shows
-the individual failures behind them, which is what the report's error-analysis
-section needs. It prints three groups:
+The ablation gives aggregate numbers (hit@1, recall@3, etc.); this script
+shows the individual failures behind them, which is what the report's
+error-analysis section needs. It prints three groups:
 
   1. MISSED@1  : in-scope queries where the top result was wrong
                  (shows the full top-K so we can see if the right record was
@@ -31,8 +31,10 @@ MARGIN = 0.05  # how close to the threshold counts as a near-miss
 
 def main() -> None:
     embedder = TextEmbedder()
-    # Analyse the variant we actually chose after the ablation: no keywords.
-    retriever = TextRetriever(embedder, include_keywords=False)
+    # Analyse the variant actually chosen after the ablation: WITH keywords
+    # (include_keywords defaults to True in TextRetriever; passed explicitly
+    # here to make the analysed variant unambiguous).
+    retriever = TextRetriever(embedder, include_keywords=True)
     queries = load_queries()
 
     missed, leaked, near_miss = [], [], []
@@ -49,7 +51,7 @@ def main() -> None:
             if top.score >= CONFIDENCE_THRESHOLD:
                 leaked.append((q, cands))
 
-    print(f"threshold={CONFIDENCE_THRESHOLD}  top_k={TOP_K}  variant=no_keywords\n")
+    print(f"threshold={CONFIDENCE_THRESHOLD}  top_k={TOP_K}  variant=with_keywords\n")
 
     print(f"=== 1. MISSED@1 - wrong top result ({len(missed)}) ===")
     for q, cands in missed:
