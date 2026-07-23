@@ -30,3 +30,8 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+# Preprocessed audio outputs
+*_preprocessed.wav
+
+# imageio-ffmpeg local alias binary
+backend/audio/.ffmpeg_bin/
