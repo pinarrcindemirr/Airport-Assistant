@@ -1,4 +1,4 @@
-# Core ML (frozen pretrained models)
+# Core ML
 torch==2.12.1
 torchvision==0.27.1
 transformers==5.12.1
@@ -19,6 +19,7 @@ openai-whisper==20250625
 librosa==0.11.0
 soundfile==0.14.0
 imageio-ffmpeg
+gTTS==2.5.4
 
 # Evaluation & analysis
 scikit-learn==1.7.2

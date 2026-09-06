@@ -1,8 +1,3 @@
-"""
-Quick manual smoke test for the fusion layer, using real models.
-Run from the project root:  python test_fusion.py
-"""
-
 from backend.assistant import process_query
 
 test_queries = [

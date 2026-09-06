@@ -4,6 +4,25 @@ import html
 
 import streamlit as st
 
+def _speech_text(response) -> str:
+    if response.answered and response.record:
+        record = response.record
+        parts = [f"{record.get('name', '')}."]
+        if record.get("directions"):
+            parts.append(f"Directions: {record['directions']}.")
+        if record.get("opening_hours"):
+            parts.append(f"Opening hours: {record['opening_hours']}.")
+        return " ".join(parts)
+    return response.message
+
+
+def _speech_button(response) -> None:
+    if st.button("\U0001F50A  Listen to this", key="result_listen"):
+        from backend.audio.tts import synthesize_speech
+        with st.spinner("Generating audio\u2026"):
+            audio_bytes = synthesize_speech(_speech_text(response))
+        st.audio(audio_bytes, format="audio/mp3")
+
 CATEGORY_LABELS = {
     "gate": "Gate Info",
     "check_in": "Check-In",
@@ -154,6 +173,7 @@ def render_response(response, summary, on_new_search) -> None:
         _no_answer_card(response, response.confidence)
 
     _decision_expander(response)
+    _speech_button(response)          # <-- YENİ SATIR
 
     left, mid, right = st.columns([1, 1, 1])
     with mid:
