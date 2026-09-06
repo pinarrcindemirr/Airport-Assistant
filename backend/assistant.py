@@ -1,18 +1,3 @@
-"""
-Single entry point for the whole assistant: process_query(text, image_path, audio_path).
-
-This is the ONLY module the UI (Streamlit today, potentially FastAPI/React
-later) needs to import. It hides all model-loading and pipeline wiring
-behind one function call, which is what makes the backend genuinely
-UI-agnostic - swapping Streamlit for a React+FastAPI frontend later only
-means writing a new thin layer that calls this same function.
-
-Models are loaded lazily (on first use) and cached as module-level
-singletons, so CLIP/Whisper/the sentence-transformer are each loaded ONCE
-per process, not once per request - important for a Streamlit app, where the
-script re-runs on every user interaction.
-"""
-
 from __future__ import annotations
 
 import torch
@@ -53,20 +38,7 @@ def _get_transcriber():
 
 def process_query(text: str | None = None, image_path: str | None = None,
                    audio_path: str | None = None) -> FusionResponse:
-    """
-    The one function the UI calls. Pass whichever of text / image_path /
-    audio_path the passenger actually provided this turn; leave the rest as
-    None (not empty string/None-equivalent placeholders - genuinely absent).
 
-    image_path is a file path, not a preprocessed tensor: this function
-    owns turning a raw upload into the tensor backend/image/retrieval.py
-    expects, so the UI layer never has to know CLIP's input format.
-    """
-    # text_retriever is needed whenever there's a text query to score - either
-    # typed directly, OR derived from audio transcription inside router.py.
-    # Loading it only when `text` was given (ignoring audio_path) was a bug:
-    # a voice-only request would transcribe fine but then crash inside
-    # router.process_query with "no text_retriever provided".
     text_retriever = _get_text_retriever() if (text or audio_path) else None
     transcriber = _get_transcriber() if audio_path else None
 

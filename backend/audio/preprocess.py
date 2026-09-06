@@ -34,24 +34,7 @@ import soundfile as sf
 
 
 def _ensure_ffmpeg_on_path() -> None:
-    """
-    librosa falls back to ffmpeg (via audioread) for formats libsndfile can't
-    read directly - notably .m4a/.mp3 phone recordings, which is exactly what
-    passengers are expected to upload/record. Rather than requiring a manual
-    system-wide ffmpeg install (awkward on Windows without admin rights), we
-    use the `imageio-ffmpeg` package, which ships a self-contained ffmpeg
-    binary as a normal pip install.
 
-    Gotcha this works around: imageio-ffmpeg's binary is NOT named
-    "ffmpeg"/"ffmpeg.exe" (e.g. it's "ffmpeg-win64-v4.2.2.exe"), but audioread
-    invokes the literal command "ffmpeg" via subprocess - just adding the
-    binary's folder to PATH is not enough, since nothing on PATH matches that
-    exact name. We copy the real binary once into a local ".ffmpeg_bin" folder
-    under the alias "ffmpeg"/"ffmpeg.exe" and put THAT folder on PATH instead.
-
-    If imageio-ffmpeg isn't installed, this silently does nothing (a system
-    ffmpeg already on PATH will still work as before).
-    """
     try:
         import shutil
         import sys
@@ -80,11 +63,7 @@ WHISPER_SAMPLE_RATE = 16_000
 
 
 def load_audio(path: str | Path, target_sr: int = WHISPER_SAMPLE_RATE) -> np.ndarray:
-    """
-    Load an audio file from disk, converting to mono and resampling to
-    `target_sr` in one step. Accepts wav/mp3/m4a/flac - whatever librosa's
-    backend (soundfile / audioread) can decode.
-    """
+
     waveform, _ = librosa.load(str(path), sr=target_sr, mono=True)
     return waveform
 
@@ -107,10 +86,7 @@ def normalize_volume(waveform: np.ndarray) -> np.ndarray:
 
 
 def extract_mfcc(waveform: np.ndarray, sr: int = WHISPER_SAMPLE_RATE, n_mfcc: int = 13) -> np.ndarray:
-    """
-    Extract MFCCs for exploratory acoustic analysis only (see module
-    docstring) - not used on the Whisper transcription path.
-    """
+
     return librosa.feature.mfcc(y=waveform, sr=sr, n_mfcc=n_mfcc)
 
 
@@ -125,12 +101,11 @@ def preprocess_audio(path: str | Path, trim: bool = True, normalize: bool = True
 
 
 def save_wav(waveform: np.ndarray, path: str | Path, sr: int = WHISPER_SAMPLE_RATE) -> None:
-    """Write a processed waveform back to disk (useful for sanity-checking the pipeline by ear)."""
     sf.write(str(path), waveform, sr)
 
 
 if __name__ == "__main__":
-    # Demo / sanity check: python -m backend.audio.preprocess <path_to_wav>
+
     import sys
     if len(sys.argv) < 2:
         print("Usage: python -m backend.audio.preprocess <path_to_audio_file>")

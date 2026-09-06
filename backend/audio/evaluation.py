@@ -1,21 +1,3 @@
-"""
-Speech pipeline evaluation.
-
-Transcribes every recording listed in data/audio/audio_queries.csv with
-Whisper and compares the output against the known ground-truth text (what
-the passenger actually said when the recording was made), reporting Word
-Error Rate (WER) overall and broken down by recording condition (quiet /
-noisy / fast / accented) - mirroring the condition-based breakdown used in
-the text and image pipelines' evaluations, rather than a single averaged
-number.
-
-WER is implemented directly (word-level Levenshtein distance) rather than
-pulling in the `jiwer` package, to keep this module dependency-light; the
-formula is standard: (substitutions + deletions + insertions) / reference_length.
-
-Run:  python -m backend.audio.evaluation
-"""
-
 from __future__ import annotations
 
 import re
@@ -31,24 +13,14 @@ DEFAULT_AUDIO_ROOT = ROOT_DIR / "data" / "audio" / "raw"
 
 
 def _normalize(text: str) -> list[str]:
-    """
-    Normalise text before WER comparison: lowercase, drop apostrophes
-    (so "I'm" -> "im", matching contraction-less ground-truth spelling as a
-    single token rather than splitting into "i"/"m"), then strip remaining
-    punctuation. Without this, Whisper's correctly-punctuated output (e.g.
-    "I'm", "B12?") would be counted as wrong against plain ground-truth
-    spelling (e.g. "im", "B12") purely due to formatting, not genuine content
-    errors. This matches standard ASR evaluation practice (WER is a content
-    metric, not a punctuation/capitalisation metric).
-    """
+
     text = text.lower().replace("'", "")
     return re.findall(r"[a-z0-9]+", text)
 
 
 def _word_error_rate(reference: str, hypothesis: str) -> float:
     """
-    Word-level Levenshtein distance / len(reference words), computed on
-    normalised tokens (see _normalize). Standard WER definition used to
+    Standard WER definition used to
     report Whisper transcription quality (brief's "basic Word Error Rate
     where possible").
     """

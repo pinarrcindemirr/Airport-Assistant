@@ -30,7 +30,6 @@ class Answer:
 
 
 class TextRetriever:
-    """Embeds the KB once, then answers queries against it."""
 
     def __init__(self, embedder: TextEmbedder, include_keywords: bool = True):
         self.embedder = embedder
@@ -40,7 +39,7 @@ class TextRetriever:
     def search(self, query: str, top_k: int = TOP_K) -> list[Candidate]:
         """Return the top_k most similar records, highest score first."""
         q = self.embedder.embed_query(query)
-        # matrix rows and q are unit vectors, so the dot product is cosine sim.
+        
         sims = self.matrix @ q
         order = np.argsort(-sims)[:top_k]
         return [
@@ -50,7 +49,6 @@ class TextRetriever:
         ]
 
     def answer(self, query: str, top_k: int = TOP_K) -> Answer:
-        """Search, then abstain if the best score is below the threshold."""
         candidates = self.search(query, top_k=top_k)
         top_score = candidates[0].score if candidates else 0.0
         return Answer(

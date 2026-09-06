@@ -37,12 +37,7 @@ QUERIES_PATH = KB_DIR.parent / "text" / "airport_queries.csv"
 
 
 def load_queries(path: Path = QUERIES_PATH) -> list[dict]:
-    """
-    Read the query set with pandas, split acceptable_ids into a set ('none'
-    -> empty), and return a list of dicts (not a DataFrame) so existing
-    callers - evaluate() below, and experimental/ablation/show_errors.py -
-    keep working unchanged; pandas is used for the read/transform step only.
-    """
+
     df = pd.read_csv(path, dtype=str, keep_default_na=False)
     df["acceptable_set"] = df["acceptable_ids"].str.strip().apply(
         lambda ids: set() if ids == "none" else set(ids.split("|"))
@@ -115,7 +110,7 @@ def _print_table(results: dict) -> None:
 
 
 def main() -> None:
-    embedder = TextEmbedder()  # downloads all-MiniLM-L6-v2 on first run
+    embedder = TextEmbedder() 
     _print_table(run(embedder))
 
 

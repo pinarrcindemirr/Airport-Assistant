@@ -1,12 +1,3 @@
-"""
-One-off measurement helper: reports how much silence trimming removes from
-each of the 15 real recordings, as evidence for the report's audio
-preprocessing section. Not part of the pipeline - run it once, copy the
-table into the report, delete it (or keep under scripts/ if you prefer).
-
-Run:  python measure_trimming.py
-"""
-
 from pathlib import Path
 
 from backend.audio.preprocess import load_audio, preprocess_audio, WHISPER_SAMPLE_RATE

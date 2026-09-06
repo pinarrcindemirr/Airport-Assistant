@@ -1,0 +1,1 @@
+# VIA frontend components package.

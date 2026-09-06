@@ -1,4 +1,3 @@
-@"
 # Core ML (frozen pretrained models)
 torch==2.12.1
 torchvision==0.27.1
@@ -31,4 +30,3 @@ streamlit
 
 # Testing
 pytest
-"@ | Set-Content -Path requirements.txt -Encoding UTF8

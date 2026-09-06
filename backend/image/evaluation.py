@@ -1,17 +1,3 @@
-"""
-Vision pipeline evaluation.
-
-Tests whether each generated airport sign image (the clean reference plus
-the three degraded query conditions produced by data/images/generate_mockups.py)
-retrieves its own KB record when matched against every record's CLIP-encoded
-visual_description. Reports top-1 and top-3 accuracy overall AND broken down
-by condition (clean/angle/dark/blur) - mirroring how the text pipeline's
-evaluation broke results down by query difficulty (easy/hard) rather than
-reporting one averaged number, so degradation robustness is visible directly.
-
-Run:  python -m backend.image.evaluation
-"""
-
 from __future__ import annotations
 
 import pandas as pd
@@ -25,19 +11,13 @@ CONDITION_ORDER = ["clean", "angle", "dark", "blur"]
 
 
 def evaluate(retriever: ImageRetriever, batch_size: int = 8) -> tuple[dict, dict]:
-    """
-    Run every image in data/images/image_labels.csv through the retriever in
-    batches, compare the top prediction against the image's own record_id
-    (ground truth: each generated image is a photo of exactly one record),
-    and aggregate accuracy per condition (via pandas groupby) plus a list of
-    concrete examples.
-    """
+
     loader = build_dataloader(batch_size=batch_size)
     rows = []
 
     for tensors, records in loader:
-        image_embs = retriever.embedder.encode_images(tensors)          # (B, d)
-        sims = image_embs @ retriever.text_matrix.T                     # (B, n_records)
+        image_embs = retriever.embedder.encode_images(tensors)      
+        sims = image_embs @ retriever.text_matrix.T                 
 
         for row, rec in zip(sims, records):
             order = torch.argsort(row, descending=True)[:IMAGE_TOP_K]
@@ -54,7 +34,6 @@ def evaluate(retriever: ImageRetriever, batch_size: int = 8) -> tuple[dict, dict
 
     df = pd.DataFrame(rows)
 
-    # Per-condition and overall accuracy via a single groupby + mean.
     grouped = df.groupby("condition").agg(
         top1_accuracy=("top1_hit", "mean"),
         top3_accuracy=("top3_hit", "mean"),

@@ -1,62 +1,22 @@
-"""
-Lightweight entity extraction for passenger text queries.
-
-Covers the brief's "entity annotation" subtask (Preprocessing > Text
-Pipeline): identifying entities such as gate number, terminal number,
-flight number, service name/category, and flight type (international vs
-domestic).
-
-Implemented with regex rather than a trained NER model (e.g. spaCy),
-because these are highly-structured, domain-specific tokens (airport gate
-codes, terminal numbers) that a general-purpose NER model isn't trained to
-recognise reliably anyway - it would need fine-tuning on airport data to do
-this well, which contradicts the frozen-model philosophy applied everywhere
-else in this project. Regex is precise, dependency-light (no extra model
-download), and fully explainable - every match can be traced to an exact
-pattern rather than an opaque model decision.
-
-This does NOT feed into retrieval (which already reaches 92.5% hit@1 via
-pure semantic embedding matching - see backend/text/evaluation output). It
-is a complementary annotation layer: useful for vocabulary/intent analysis
-in the data exploration notebook, and for surfacing extracted entities in
-the UI response (e.g. highlighting "Gate B12" or "Terminal 2" explicitly).
-
-Note: airline names are intentionally NOT extracted. The knowledge base
-distinguishes check-in areas by flight type (International vs Domestic),
-not by carrier, so an airline entity would have no KB record to resolve to.
-Flight type is extracted instead, because it maps directly onto the KB's
-"Terminal 1 International Check-in" / "Terminal 1 Domestic Check-in" records.
-"""
-
 from __future__ import annotations
 
 import re
 
-# Gate codes: a letter (A/B/C, matching the KB's actual gates B12/A05/C22)
-# followed by 1-2 digits, with an optional space/hyphen ("B12", "B 12", "B-12").
 GATE_PATTERN = re.compile(r"\b([A-Ca-c])\s?-?\s?(\d{1,2})\b")
 
-# "Terminal 1" / "terminal 2" (the two terminals that exist in the KB).
 TERMINAL_PATTERN = re.compile(r"\bterminal\s?(\d)\b", re.IGNORECASE)
 
-# Airline flight codes like "TK1980": two letters + 2-4 digits.
+
 FLIGHT_NUMBER_PATTERN = re.compile(r"\b([A-Z]{2})\s?(\d{2,4})\b")
 
-# Flight type keywords -> maps onto the KB's International/Domestic check-in
-# records. "arrivals/departures" are common near-synonyms passengers use.
+
 FLIGHT_TYPE_KEYWORDS = {
     "international": ["international", "abroad", "overseas"],
     "domestic": ["domestic", "internal"],
 }
 
-# Maps each KB category to the everyday words a passenger might use for it-
-# reuses the same category vocabulary as backend/kb/kb.py's `category` field,
-# so a match here can be looked up directly via get_records_by_category().
 SERVICE_KEYWORDS = {
     "gate": ["gate"],
-    # NOTE: singular "bag" removed - it fired incorrectly on "drop my bags
-    # before security" (a check-in / bag-drop action, not baggage claim).
-    # "bags" (plural) is kept because it reliably means collecting luggage.
     "baggage_claim": ["baggage", "luggage", "suitcase", "bags"],
     "check_in": ["check in", "check-in", "checkin", "bag drop", "counter"],
     "security": ["security"],
@@ -94,10 +54,7 @@ def extract_flight_number(text: str) -> str | None:
 
 
 def extract_flight_type(text: str) -> str | None:
-    """
-    Extract flight type ('international' or 'domestic') from free text, or None.
-    Maps directly onto the KB's International/Domestic check-in records.
-    """
+
     text_lower = text.lower()
     for ftype, keywords in FLIGHT_TYPE_KEYWORDS.items():
         for kw in keywords:
@@ -107,12 +64,7 @@ def extract_flight_type(text: str) -> str | None:
 
 
 def extract_service_categories(text: str) -> list[str]:
-    """
-    Return every KB category whose keyword list matches this text (possibly
-    more than one). Uses word-boundary matching, not plain substring search:
-    a naive `"bus" in text` would wrongly fire on "business" (as in "business
-    lounge"), since "bus" is literally a substring of "business".
-    """
+
     text_lower = text.lower()
     matches = []
     for cat, keywords in SERVICE_KEYWORDS.items():
@@ -125,10 +77,7 @@ def extract_service_categories(text: str) -> list[str]:
 
 
 def extract_entities(text: str) -> dict:
-    """
-    Run all extractors on a single query and return a structured dict.
-    Any field an extractor finds nothing for is None/[] - never guessed.
-    """
+
     return {
         "gate": extract_gate(text),
         "terminal": extract_terminal(text),

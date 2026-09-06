@@ -1,35 +1,3 @@
-"""
-Image retrieval over the knowledge base.
-
-Given a preprocessed passenger photo, return the most relevant KB record(s)
-by cosine similarity against every record's CLIP-encoded visual_description,
-and decide whether the system is confident enough to answer. This mirrors
-backend/text/retrieval.py's search()/answer() split exactly, so both
-modalities expose the same interface to the multimodal fusion layer.
-
-On the confidence threshold: CLIP image-to-text cosine similarities and
-sentence-transformer text-to-text similarities are NOT on the same scale
-(CLIP scores typically sit lower - often 0.15-0.35 even for a correct match,
-versus sentence-transformers' 0.3-0.6 seen in the text pipeline).
-
-IMAGE_CONFIDENCE_THRESHOLD was calibrated against real evaluation data
-(80 images, ViT-B/32): correct top-1 predictions scored 0.235-0.376
-(mean 0.306), while incorrect top-1 predictions scored 0.238-0.324
-(mean 0.285) - the two distributions almost completely overlap. Unlike the
-text pipeline, where the confidence threshold cleanly separated answered
-from abstained queries, a similarity threshold provides very little
-discriminative power here: CLIP is often just as "confident" when wrong as
-when right, because most errors come from genuinely near-duplicate KB
-content (e.g. gate_a05 vs gate_c22 differ only by a short alphanumeric code
-CLIP reads unreliably; several categories originally shared an identical
-sign colour) rather than from genuine uncertainty. The threshold is set just
-below the observed floor of both distributions (~0.235) so the system rarely
-abstains on this dataset; abstention here is a weak safety net, and the real
-fix for the observed errors is disambiguating KB content, not threshold
-tuning (see backend/image/evaluation.py output and the report's error
-analysis for specifics).
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass

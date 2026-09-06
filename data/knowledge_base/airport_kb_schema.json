@@ -62,7 +62,9 @@
               "customs",
               "currency_exchange",
               "special_assistance",
-              "transport"
+              "transport",
+              "pharmacy",
+              "smoking_area"
             ],
             "description": "Service category. Justification: enables intent-to-category matching and image-category matching; drives class-distribution analysis."
           },

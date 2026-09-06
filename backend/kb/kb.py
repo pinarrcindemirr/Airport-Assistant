@@ -1,21 +1,3 @@
-"""
-Knowledge base access layer.
-
-This module is the single gateway between the airport knowledge base
-(JSON file) and the rest of the application. No other module should read
-the JSON directly; everything goes through here. If the storage format
-ever changes (e.g. to SQLite), only this file needs updating.
-
-Responsibilities:
-  1. Load the KB JSON (cached, loaded once).
-  2. Provide simple access to records (all / by id / by category / related).
-  3. Build the text used for embedding, at runtime, so the source data
-     stays the single source of truth:
-       - text pipeline  -> name + description + directions + location
-                           (+ keywords, optional - see note below)
-       - image pipeline -> visual_description only (for CLIP)
-"""
-
 import json
 from functools import lru_cache
 from typing import Optional
@@ -44,13 +26,7 @@ def get_record_by_id(record_id: str) -> Optional[dict]:
 
 
 def get_records_by_category(category: str) -> list[dict]:
-    """
-    Return all records in a given category.
 
-    Used later for intent-to-category matching (e.g. a 'baggage' intent maps
-    to the baggage_claim category) and for class-distribution analysis in the
-    data exploration notebook.
-    """
     return [r for r in get_all_records() if r["category"] == category]
 
 
@@ -68,21 +44,7 @@ def get_related(record_id: str) -> list[dict]:
 
 
 def build_text_for_embedding(record: dict, include_keywords: bool = False) -> str:
-    """
-    Build the combined text used by the TEXT pipeline (SentenceTransformer).
 
-    Combines the fields a passenger query is likely to match against:
-    name, description, directions, and location. Generated at runtime so it
-    always reflects the current record (no duplicated/stale field in the JSON).
-
-    Args:
-        include_keywords: If True, append the record's keywords as an extra
-            line. This is left OFF by default and exposed as a flag so the two
-            variants can be compared in an ablation study (see notebook 02).
-            SentenceTransformer is trained on natural sentences, so appending a
-            comma-separated keyword list may help OR hurt retrieval - it must be
-            measured, not assumed.
-    """
     text = (
         f"{record['name']}. "
         f"{record['description']} "
@@ -95,10 +57,5 @@ def build_text_for_embedding(record: dict, include_keywords: bool = False) -> st
 
 
 def build_visual_text(record: dict) -> str:
-    """
-    Build the text used by the IMAGE pipeline (CLIP).
 
-    Uses only visual_description, so CLIP matches images against how a place
-    LOOKS, not against opening hours or directions (which would hurt matching).
-    """
     return record["visual_description"]
