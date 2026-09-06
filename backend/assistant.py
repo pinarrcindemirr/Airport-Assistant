@@ -8,6 +8,7 @@ from backend.fusion.router import process_query as _fusion_process_query
 _text_retriever = None
 _image_retriever = None
 _transcriber = None
+_ocr_reader = None
 
 
 def _get_text_retriever():
@@ -36,11 +37,19 @@ def _get_transcriber():
     return _transcriber
 
 
+def _get_ocr_reader():
+    global _ocr_reader
+    if _ocr_reader is None:
+        from backend.image.ocr_reader import SignTextReader
+        _ocr_reader = SignTextReader()
+    return _ocr_reader
+
+
 def process_query(text: str | None = None, image_path: str | None = None,
                    audio_path: str | None = None) -> FusionResponse:
-
-    text_retriever = _get_text_retriever() if (text or audio_path) else None
+    text_retriever = _get_text_retriever() if (text or audio_path or image_path) else None
     transcriber = _get_transcriber() if audio_path else None
+    ocr_reader = _get_ocr_reader() if image_path else None
 
     image_tensor = None
     image_retriever = None
@@ -53,7 +62,9 @@ def process_query(text: str | None = None, image_path: str | None = None,
         text_retriever=text_retriever,
         image_retriever=image_retriever,
         transcriber=transcriber,
+        ocr_reader=ocr_reader,
         text=text,
         image_tensor=image_tensor,
+        image_path=image_path,
         audio_path=audio_path,
     )

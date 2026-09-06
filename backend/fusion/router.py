@@ -4,14 +4,16 @@ import torch
 
 from backend.kb.kb import get_record_by_id
 from backend.schemas import ModalityResult, FusionResponse
-from backend.fusion.confidence import text_confidence, image_confidence, audio_confidence, combined_confidence
+from backend.fusion.confidence import (
+    text_confidence, image_confidence, audio_confidence, ocr_confidence, combined_confidence,
+)
 
 FUSION_CONFIDENCE_THRESHOLD = 0.5
 
 
-def process_query(text_retriever=None, image_retriever=None, transcriber=None,
+def process_query(text_retriever=None, image_retriever=None, transcriber=None, ocr_reader=None,
                    text: str | None = None, image_tensor: torch.Tensor | None = None,
-                   audio_path: str | None = None) -> FusionResponse:
+                   image_path: str | None = None, audio_path: str | None = None) -> FusionResponse:
 
     modality_results: list[ModalityResult] = []
 
@@ -24,12 +26,27 @@ def process_query(text_retriever=None, image_retriever=None, transcriber=None,
             modality="audio",
             answered=transcription.answered,
             confidence=audio_confidence(transcription.avg_logprob),
-            record_id=None,  # audio itself doesn't point to a KB record - only the resulting text does
+            record_id=None,  
             raw_score=transcription.avg_logprob,
             extra={"transcribed_text": transcription.text, "no_speech_prob": transcription.no_speech_prob},
         ))
         if resolved_text is None:
-            resolved_text = transcription.text  # voice becomes the query only if no typed text was given
+            resolved_text = transcription.text  
+
+    if image_path is not None:
+        if ocr_reader is None:
+            raise ValueError("image_path given but no ocr_reader provided")
+        ocr_result = ocr_reader.read(image_path)
+        modality_results.append(ModalityResult(
+            modality="ocr",
+            answered=ocr_result.answered,
+            confidence=ocr_confidence(ocr_result.confidence),
+            record_id=None,  
+            raw_score=ocr_result.confidence,
+            extra={"ocr_text": ocr_result.text, "num_detections": ocr_result.num_detections},
+        ))
+        if resolved_text is None and ocr_result.text:
+            resolved_text = ocr_result.text 
 
     if resolved_text:
         if text_retriever is None:
@@ -101,7 +118,7 @@ def _combine(modality_results: list[ModalityResult]) -> FusionResponse:
             if alt_ids:
                 message += f" Note: another input suggested a different match ({', '.join(alt_ids)})."
     else:
-        message = "I found a possible match but I'm not confident enough - please double-check with airport staff."
+        message = "I found a possible match but I'm not confident enough -please double-check with airport staff."
 
     return FusionResponse(
         answered=answered,

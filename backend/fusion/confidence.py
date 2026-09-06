@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-# (floor, ceiling) observed from each pipeline's real evaluation runs.
-# floor: roughly where that modality's own abstention threshold sits.
-# ceiling: roughly the best score seen on a clean, confident, correct match.
 TEXT_SCORE_RANGE = (0.30, 0.60)
 IMAGE_SCORE_RANGE = (0.22, 0.38)
-AUDIO_LOGPROB_RANGE = (-1.5, -0.05) 
+AUDIO_LOGPROB_RANGE = (-1.5, -0.05)
+OCR_CONFIDENCE_RANGE = (0.55, 1.00)
 
 
 def _normalize(value: float, floor: float, ceiling: float) -> float:
@@ -25,6 +23,8 @@ def image_confidence(cosine_score: float) -> float:
 def audio_confidence(avg_logprob: float) -> float:
     return _normalize(avg_logprob, *AUDIO_LOGPROB_RANGE)
 
+def ocr_confidence(mean_detection_conf: float) -> float:
+    return _normalize(mean_detection_conf, *OCR_CONFIDENCE_RANGE)
 
 def combined_confidence(confidences: list[float]) -> float:
 
