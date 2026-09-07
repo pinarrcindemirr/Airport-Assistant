@@ -98,9 +98,9 @@ class AirportImageDataset(Dataset):
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, ImageRecord]:
         rec = self.records[idx]
-        tensor = preprocess(self.project_root / rec.filename, use_augment=self.use_augment)
+        filename = rec.filename.replace("\\", "/")   # normalize Windows-style separators
+        tensor = preprocess(self.project_root / filename, use_augment=self.use_augment)
         return tensor, rec
-
 
 def _collate(batch):
     """Custom collate: stack tensors, keep metadata as a plain list (not stackable)."""
