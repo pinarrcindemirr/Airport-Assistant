@@ -1,0 +1,16 @@
+audio_id,intent,condition,expected_text,wer_base,wer_small
+a01,find_gate,quiet,where is gate B12,0.0,0.0
+a02,find_gate,quiet,im at the gate but cant find it,0.0,0.0
+a03,find_baggage,quiet,where do I pick up my luggage,0.0,0.0
+a04,find_baggage,quiet,my suitcase didnt come out what do I do,0.1111111111111111,0.0
+a05,find_lounge,quiet,is there a lounge here,0.2,0.2
+a06,find_lounge,quiet,can I rest somewhere quiet before my flight,0.0,0.0
+a07,find_checkin,quiet,where do I check in,0.0,0.0
+a08,find_checkin,quiet,where do I drop my bags before security,0.0,0.0
+a09,find_food,quiet,im hungry where can I eat,0.0,0.0
+a10,find_food,noisy,coffee near gate A,0.5,1.0
+a11,find_currency,quiet,where can I get cash,0.0,0.0
+a12,flight_status,quiet,is my flight on time,0.0,0.2
+a13,find_customs,noisy,where is passport control,0.0,0.0
+a14,find_pharmacy,quiet,is there a pharmacy in the airport,0.14285714285714285,0.0
+a15,find_help_desk,fast,i lost my passport who do I talk to,0.0,0.0
