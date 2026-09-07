@@ -81,3 +81,11 @@ q79,where am i allowed to smoke,find_smoking,smoking_area,smoking_area_t1,easy
 q80,is there a smoking lounge after security,find_smoking,smoking_area,smoking_area_t1,easy
 q81,can i vape anywhere in the terminal,find_smoking,smoking_area,smoking_area_t1,hard
 q82,designated smoking zone location,find_smoking,smoking_area,smoking_area_t1,easy
+q83,is there wheelchair assistance available,find_accessibility,special_assistance,special_assistance_t1,easy
+q84,i need help with mobility around the airport,find_accessibility,special_assistance,special_assistance_t1,hard
+q85,do you have staff who can help disabled passengers,find_accessibility,special_assistance,special_assistance_t1,easy
+q86,where do i request a wheelchair,find_accessibility,special_assistance,special_assistance_t1,easy
+q87,what time does the pharmacy open,find_hours,pharmacy,pharmacy_t1,easy
+q88,is the lounge open right now,find_hours,lounge,lounge_t2,easy
+q89,what are the opening hours for check in,find_hours,check_in,checkin_t1_intl|checkin_t1_domestic,easy
+q90,is the information desk open 24 hours,find_hours,information_desk,information_desk_t1|information_desk_t2,hard
