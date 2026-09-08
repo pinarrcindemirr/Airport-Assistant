@@ -8,7 +8,7 @@ a06,find_lounge,quiet,can I rest somewhere quiet before my flight,0.0,0.0
 a07,find_checkin,quiet,where do I check in,0.0,0.0
 a08,find_checkin,quiet,where do I drop my bags before security,0.0,0.0
 a09,find_food,quiet,im hungry where can I eat,0.0,0.0
-a10,find_food,noisy,coffee near gate A,0.5,1.0
+a10,find_food,noisy,coffee near gate A,1.0,1.0
 a11,find_currency,quiet,where can I get cash,0.0,0.0
 a12,flight_status,quiet,is my flight on time,0.0,0.2
 a13,find_customs,noisy,where is passport control,0.0,0.0
