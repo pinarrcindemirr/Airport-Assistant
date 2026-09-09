@@ -1,10 +1,10 @@
 pipeline,metric,value
-"Text (intent, NearestCentroid)",accuracy,0.793
-"Text (intent, NearestCentroid)",macro F1,0.784
-"Text (retrieval, hit@1)",hit@1,0.896
+"Text (intent, NearestCentroid)",accuracy,0.789
+"Text (intent, NearestCentroid)",macro F1,0.782
+"Text (retrieval, hit@1)",hit@1,0.893
 "Text (retrieval, hit@1)",abstain_acc,1.0
 "Image (CLIP, production)",top-1 accuracy,0.739
 "Image (CLIP, production)",top-3 accuracy,0.875
 "Image (Qwen2.5-VL, experimental)",top-1 accuracy,0.955
-"Audio (Whisper base, production)",WER,0.064
+"Audio (Whisper base, production)",WER,0.097
 "Audio (Whisper small, experimental)",WER,0.093
