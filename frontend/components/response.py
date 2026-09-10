@@ -130,8 +130,7 @@ def _success_card(record: dict, confidence: float) -> None:
             <h2 class="via-answer-name">{_esc(record.get("name", ""))}</h2>
             {zone_chip_html}
             <div class="via-rows">{rows}</div>
-            {contact_html}
-            <div class="via-disclaimer">Information may change \u2014 please confirm with airport staff.</div>
+            {contact_html}<div class="via-disclaimer">Information may change \u2014 please confirm with airport staff.</div>
         </div>
         """,
         unsafe_allow_html=True,
