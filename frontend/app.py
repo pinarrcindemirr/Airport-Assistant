@@ -48,13 +48,47 @@ def _init_state() -> None:
         "aud_bytes": None,
         "error_message": None,
         "pending_quick_query": None,
+        "models_warmed": False,
     }
     for key, val in defaults.items():
         st.session_state.setdefault(key, val)
 
 
+def _warm_up_models() -> None:
+
+    if st.session_state.models_warmed:
+        return
+    placeholder = st.empty()
+    placeholder.markdown(
+        """
+        <div class="via-loading-box via-loading-warmup">
+            <div class="via-loading-spinner"></div>
+            <span>Initializing VIA systems for the first time
+            — this may take up to 20 seconds…</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    from backend.assistant import warm_up
+    warm_up()
+    placeholder.empty()
+    st.session_state.models_warmed = True
+
+
+def _cleanup_temp_files(*paths) -> None:
+
+    for path in paths:
+        if not path:
+            continue
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+
+
 def reset_to_composer() -> None:
     """Full reset back to a clean composer (the 'New Search' action)."""
+    _cleanup_temp_files(st.session_state.img_path, st.session_state.aud_path)
     st.session_state.view = "composer"
     st.session_state.response = None
     st.session_state.query_summary = None
@@ -75,17 +109,30 @@ def reset_to_composer() -> None:
 def run_query(text: str | None, image_path: str | None, audio_path: str | None):
     from backend.assistant import process_query
 
+    placeholder = st.empty()
+    placeholder.markdown(
+        """
+        <div class="via-loading-box">
+            <div class="via-loading-spinner"></div>
+            <span>Searching the airport knowledge base\u2026</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     try:
-        with st.spinner("Searching the airport knowledge base\u2026"):
-            response = process_query(
-                text=text or None,
-                image_path=image_path,
-                audio_path=audio_path,
-            )
+        response = process_query(
+            text=text or None,
+            image_path=image_path,
+            audio_path=audio_path,
+        )
     except Exception as e:
+        placeholder.empty()
+        _cleanup_temp_files(image_path, audio_path)
         st.session_state.error_message = str(e)
         st.session_state.view = "error"
         return
+    placeholder.empty()
+    _cleanup_temp_files(image_path, audio_path)
 
     st.session_state.response = response
     st.session_state.query_summary = {
@@ -101,19 +148,21 @@ def run_query(text: str | None, image_path: str | None, audio_path: str | None):
 # ------------- #
 _load_css()
 _init_state()
+_warm_up_models()
 
 render_sidebar(on_new_search=reset_to_composer)
 
 if st.session_state.pending_quick_query:
     _quick_q = st.session_state.pending_quick_query
     st.session_state.pending_quick_query = None
+    _cleanup_temp_files(st.session_state.img_path, st.session_state.aud_path)
     st.session_state.img_path = None
     st.session_state.img_name = None
     st.session_state.aud_path = None
     st.session_state.aud_name = None
     st.session_state.aud_bytes = None
     run_query(_quick_q, None, None)
-    
+
 if st.session_state.view == "result" and st.session_state.response is not None:
     render_response(
         st.session_state.response,

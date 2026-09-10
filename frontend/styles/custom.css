@@ -12,6 +12,41 @@
     --via-radius: 14px;
 }
 
+/* ---- Loading box (search + warm-up) ---- */
+.via-loading-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--via-blue-soft);
+    color: var(--via-navy);
+    border-radius: var(--via-radius);
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 14px 0;
+    border: 1px solid #D6E2F7;
+}
+.via-loading-warmup {
+    background: var(--via-amber-bg);
+    color: var(--via-amber-ink);
+    border-color: var(--via-amber-line);
+}
+.via-loading-spinner {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(15, 30, 61, 0.15);
+    border-top-color: var(--via-blue);
+    border-radius: 50%;
+    animation: via-spin 0.8s linear infinite;
+}
+.via-loading-warmup .via-loading-spinner {
+    border-top-color: var(--via-amber-ink);
+}
+@keyframes via-spin {
+    to { transform: rotate(360deg); }
+}
+
 /* ---- App background ---- */
 .stApp { background: #F5F7FB; }
 .block-container { padding-top: 2.2rem; max-width: 1100px; }

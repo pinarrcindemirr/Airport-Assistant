@@ -44,6 +44,18 @@ def _get_ocr_reader():
         _ocr_reader = SignTextReader()
     return _ocr_reader
 
+def warm_up() -> None:
+    
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = [
+            executor.submit(_get_text_retriever),
+            executor.submit(_get_image_retriever),
+            executor.submit(_get_transcriber),
+            executor.submit(_get_ocr_reader),
+        ]
+        for f in futures:
+            f.result()
 
 def process_query(text: str | None = None, image_path: str | None = None,
                    audio_path: str | None = None) -> FusionResponse:
