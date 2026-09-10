@@ -9,6 +9,7 @@ from backend.fusion.confidence import (
 )
 
 FUSION_CONFIDENCE_THRESHOLD = 0.5
+DISAGREEMENT_CONFIDENCE_PENALTY = 0.85
 
 
 def process_query(text_retriever=None, image_retriever=None, transcriber=None, ocr_reader=None,
@@ -98,25 +99,36 @@ def _combine(modality_results: list[ModalityResult]) -> FusionResponse:
                      "with airport staff or an information desk.",
         )
 
-    if agreement:
+    if agreement is True:
         chosen_id = confident_candidates[0].record_id
         combined_conf = combined_confidence([m.confidence for m in confident_candidates])
-    else:
+    elif agreement is False:
         best = max(confident_candidates, key=lambda m: m.confidence)
+        chosen_id = best.record_id
+        combined_conf = best.confidence * DISAGREEMENT_CONFIDENCE_PENALTY
+    else:
+        best = confident_candidates[0]
         chosen_id = best.record_id
         combined_conf = best.confidence
 
     record = get_record_by_id(chosen_id)
+
+    alternate_record = None
+    if agreement is False:
+        alt_ids = {m.record_id for m in confident_candidates} - {chosen_id}
+        if alt_ids:
+            alternate_record = get_record_by_id(next(iter(alt_ids)))
+
+    unused_modalities = [m.modality for m in modality_results if not m.answered]
+
     answered = combined_conf >= FUSION_CONFIDENCE_THRESHOLD
 
     if answered:
         message = f"Here's what I found: {record['name']}."
         if agreement is True:
             message += " (confirmed by more than one input)"
-        elif agreement is False:
-            alt_ids = {m.record_id for m in confident_candidates} - {chosen_id}
-            if alt_ids:
-                message += f" Note: another input suggested a different match ({', '.join(alt_ids)})."
+        elif agreement is False and alternate_record:
+            message += f" Note: another input suggested a different match ({alternate_record['name']})."
     else:
         message = "I found a possible match but I'm not confident enough -please double-check with airport staff."
 
@@ -127,4 +139,6 @@ def _combine(modality_results: list[ModalityResult]) -> FusionResponse:
         modality_results=modality_results,
         agreement=agreement,
         message=message,
+        alternate_record=alternate_record,
+        unused_modalities=unused_modalities,
     )

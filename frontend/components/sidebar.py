@@ -32,13 +32,15 @@ def render_sidebar(on_new_search) -> None:
             on_new_search()
             st.rerun()
 
+        if st.button("\U0001F4CD  Find Info Desk", use_container_width=True, key="sb_infodesk"):
+            st.session_state.pending_quick_query = "Where is the nearest information desk?"
+            st.rerun()
+
         st.markdown('<div class="via-section-label">SAMPLE QUERIES</div>',
                     unsafe_allow_html=True)
         for i, q in enumerate(SAMPLE_QUERIES):
             if st.button(q, key=f"sb_sample_{i}", use_container_width=True):
-                on_new_search()
-                st.session_state.prefill = q
-                st.session_state.view = "composer"
+                st.session_state.pending_quick_query = q
                 st.rerun()
 
         st.markdown('<div class="via-section-label">HOW IT WORKS</div>',

@@ -12,7 +12,7 @@ import streamlit as st
 
 from components.sidebar import render_sidebar
 from components.composer import render_composer
-from components.response import render_response
+from components.response import render_response, render_error
 
 
 # --------------- #
@@ -45,7 +45,9 @@ def _init_state() -> None:
         "img_name": None,
         "aud_path": None,
         "aud_name": None,
-        "aud_bytes": None,         
+        "aud_bytes": None,
+        "error_message": None,
+        "pending_quick_query": None,
     }
     for key, val in defaults.items():
         st.session_state.setdefault(key, val)
@@ -62,6 +64,7 @@ def reset_to_composer() -> None:
     st.session_state.aud_path = None
     st.session_state.aud_name = None
     st.session_state.aud_bytes = None
+    st.session_state.error_message = None
     st.session_state.img_nonce += 1
     st.session_state.aud_nonce += 1
 
@@ -72,12 +75,17 @@ def reset_to_composer() -> None:
 def run_query(text: str | None, image_path: str | None, audio_path: str | None):
     from backend.assistant import process_query
 
-    with st.spinner("Searching the airport knowledge base\u2026"):
-        response = process_query(
-            text=text or None,
-            image_path=image_path,
-            audio_path=audio_path,
-        )
+    try:
+        with st.spinner("Searching the airport knowledge base\u2026"):
+            response = process_query(
+                text=text or None,
+                image_path=image_path,
+                audio_path=audio_path,
+            )
+    except Exception as e:
+        st.session_state.error_message = str(e)
+        st.session_state.view = "error"
+        return
 
     st.session_state.response = response
     st.session_state.query_summary = {
@@ -96,10 +104,25 @@ _init_state()
 
 render_sidebar(on_new_search=reset_to_composer)
 
+if st.session_state.pending_quick_query:
+    _quick_q = st.session_state.pending_quick_query
+    st.session_state.pending_quick_query = None
+    st.session_state.img_path = None
+    st.session_state.img_name = None
+    st.session_state.aud_path = None
+    st.session_state.aud_name = None
+    st.session_state.aud_bytes = None
+    run_query(_quick_q, None, None)
+    
 if st.session_state.view == "result" and st.session_state.response is not None:
     render_response(
         st.session_state.response,
         st.session_state.query_summary,
+        on_new_search=reset_to_composer,
+    )
+elif st.session_state.view == "error":
+    render_error(
+        st.session_state.error_message,
         on_new_search=reset_to_composer,
     )
 else:

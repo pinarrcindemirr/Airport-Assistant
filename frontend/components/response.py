@@ -38,6 +38,8 @@ CATEGORY_LABELS = {
     "currency_exchange": "Currency Exchange",
     "special_assistance": "Special Assistance",
     "transport": "Transport",
+    "pharmacy": "Pharmacy",
+    "smoking_area": "Smoking Area",
 }
 
 
@@ -77,6 +79,8 @@ def _query_summary(summary: dict | None) -> None:
 
 
 def _success_card(record: dict, confidence: float) -> None:
+    from backend.fusion.router import FUSION_CONFIDENCE_THRESHOLD
+
     category = record.get("category", "")
     label = CATEGORY_LABELS.get(category, category.replace("_", " ").title())
 
@@ -84,7 +88,12 @@ def _success_card(record: dict, confidence: float) -> None:
     zone = record.get("floor_or_zone", "")
     zone_bits = " \u00b7 ".join([b for b in (terminal, zone) if b])
 
-    tone = "high" if confidence >= 0.75 else "mid"
+    if confidence >= 0.75:
+        tone = "high"
+    elif confidence >= FUSION_CONFIDENCE_THRESHOLD:
+        tone = "mid"
+    else:
+        tone = "low"
 
     rows = ""
     for icon, title, key in (
@@ -140,6 +149,54 @@ def _no_answer_card(response, confidence: float) -> None:
     )
 
 
+def _alt_record_confidence(response) -> float:
+    if not response.alternate_record:
+        return 0.0
+    alt_id = response.alternate_record.get("id")
+    for m in response.modality_results:
+        if m.record_id == alt_id:
+            return m.confidence
+    return 0.0
+
+
+def _alternate_suggestion(response) -> None:
+    if response.agreement is False and response.alternate_record:
+        alt = response.alternate_record
+        st.markdown(
+            '<div class="via-alt-label">Inputs disagreed \u2014 did you mean this instead?</div>',
+            unsafe_allow_html=True,
+        )
+        if st.button(f"\U0001F504  {alt['name']}", key="alt_record_btn", use_container_width=True):
+            from backend.schemas import FusionResponse
+            st.session_state.response = FusionResponse(
+                answered=True,
+                record=alt,
+                confidence=_alt_record_confidence(response),
+                modality_results=response.modality_results,
+                agreement=None,
+                message=f"Here's what I found: {alt['name']}.",
+                alternate_record=None,
+            )
+            st.rerun()
+
+
+UNUSED_MODALITY_MESSAGES = {
+    "text": "your typed question didn't match anything in our records",
+    "image": "your photo didn't match any known airport sign or location",
+    "audio": "we couldn't clearly understand your voice input",
+    "ocr": "we couldn't read clear text on your photo",
+}
+
+
+def _unused_modalities_note(response) -> None:
+    unused = getattr(response, "unused_modalities", None)
+    if not (response.answered and response.agreement is not False and unused):
+        return
+    parts = [UNUSED_MODALITY_MESSAGES.get(m, f"your {m} input") for m in unused]
+    note = "; ".join(parts)
+    st.caption(f"\u2139\ufe0f Note: {note}.")
+
+
 def _decision_expander(response) -> None:
 
     results = getattr(response, "modality_results", None)
@@ -163,6 +220,23 @@ def _decision_expander(response) -> None:
         elif response.agreement is False:
             st.info("Inputs pointed to different records; the more confident one was used.")
 
+def render_error(message: str, on_new_search) -> None:
+    st.markdown(
+        """
+        <div class="via-card via-lowconf">
+            <div class="via-badge via-badge-warn">[ SOMETHING WENT WRONG ]</div>
+            <p class="via-lowconf-msg">We couldn't process that request right now.
+            Please try again, or check with airport staff if the problem continues.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    with st.expander("Technical details"):
+        st.code(message)
+    if st.button("\U0001F50D  New Search", use_container_width=True,
+                 type="primary", key="error_new"):
+        on_new_search()
+        st.rerun()
 
 def render_response(response, summary, on_new_search) -> None:
     _query_summary(summary)
@@ -172,8 +246,10 @@ def render_response(response, summary, on_new_search) -> None:
     else:
         _no_answer_card(response, response.confidence)
 
+    _alternate_suggestion(response)
+    _unused_modalities_note(response)
     _decision_expander(response)
-    _speech_button(response)          # <-- YENİ SATIR
+    _speech_button(response)    
 
     left, mid, right = st.columns([1, 1, 1])
     with mid:
@@ -186,7 +262,5 @@ def render_response(response, summary, on_new_search) -> None:
         with right:
             if st.button("\U0001F4CD  Find Info Desk", use_container_width=True,
                          key="result_infodesk"):
-                on_new_search()
-                st.session_state.prefill = "Where is the nearest information desk?"
-                st.session_state.view = "composer"
+                st.session_state.pending_quick_query = "Where is the nearest information desk?"
                 st.rerun()

@@ -1,8 +1,3 @@
-"""
-Unified composer: text + photo + voice on ONE screen, all available at once
-(no tabs, no mode switching).
-"""
-
 from __future__ import annotations
 
 import os
@@ -13,10 +8,24 @@ import streamlit as st
 _IMAGE_TYPES = ["png", "jpg", "jpeg", "webp"]
 _AUDIO_TYPES = ["wav", "mp3", "m4a", "ogg"]
 
+CATEGORY_SAMPLE_QUERIES = [
+    ("Gate A05", "Where is Gate A05?"),
+    ("Gate C22", "Where is Gate C22?"),
+    ("Security", "Where is the security checkpoint?"),
+    ("Information Desk", "Where is the nearest information desk?"),
+    ("Lounge", "Is there a lounge near Terminal 2?"),
+    ("Restroom", "Where is the nearest restroom?"),
+    ("Lost & Found", "Where is the lost and found office?"),
+    ("Customs", "Where is customs?"),
+    ("Special Assistance", "Where is the special assistance desk?"),
+    ("Transport", "Where can I find airport transport?"),
+    ("Pharmacy", "Is there a pharmacy in the airport?"),
+    ("Smoking Area", "Where is the smoking area?"),
+]
+
 
 def _save_temp(uploaded_file, allowed_ext) -> str:
-    """Persist an in-memory Streamlit upload to a temp file and return its path
-    (process_query expects a file PATH, not an in-memory buffer)."""
+    
     ext = os.path.splitext(uploaded_file.name)[1].lower()
     if ext.lstrip(".") not in allowed_ext:
         ext = "." + allowed_ext[0]
@@ -26,7 +35,7 @@ def _save_temp(uploaded_file, allowed_ext) -> str:
 
 
 def _popover(label):
-    """st.popover when available (Streamlit >= 1.32), else an expander."""
+    
     if hasattr(st, "popover"):
         return st.popover(label, use_container_width=True)
     return st.expander(label)
@@ -96,6 +105,19 @@ def _render_attachment_controls() -> None:
         st.markdown("</div>", unsafe_allow_html=True)
 
 
+def _render_category_examples() -> None:
+
+    st.markdown('<div class="via-sample-label">TRY ASKING</div>',
+                unsafe_allow_html=True)
+    cols = st.columns(3)
+    for i, (label, question) in enumerate(CATEGORY_SAMPLE_QUERIES):
+        with cols[i % 3]:
+            if st.button(question, key=f"cat_sample_{label}",
+                         use_container_width=True):
+                st.session_state.prefill = question
+                st.rerun()
+
+
 def render_composer(on_submit) -> None:
     st.markdown('<h1 class="via-title">VIA</h1>', unsafe_allow_html=True)
     st.markdown('<p class="via-subtitle">Ask by text, voice, or photo</p>',
@@ -110,6 +132,8 @@ def render_composer(on_submit) -> None:
         )
 
         _render_attachment_controls()
+
+        _render_category_examples()
 
         send = st.button("Send  \u2192", type="primary", key="composer_send")
 

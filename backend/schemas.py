@@ -20,4 +20,6 @@ class FusionResponse:
     confidence: float                  
     modality_results: list[ModalityResult]
     agreement: bool | None            
-    message: str                     
+    message: str
+    alternate_record: dict | None = None
+    unused_modalities: list[str] = field(default_factory=list)                  
