@@ -19,7 +19,6 @@ source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Python 3.10 is recommended (matches the development environment).
 
 ## Running
 
@@ -27,36 +26,28 @@ Python 3.10 is recommended (matches the development environment).
 streamlit run frontend/app.py
 ```
 
-The app opens automatically in your browser (usually http://localhost:8501).
-On first use, models are loaded into memory in parallel (~18 seconds) — an
-"Initializing VIA systems…" box will show during this warm-up. This only
-happens once per server process.
-
-Try any of the sidebar's sample queries to get started, or use the composer
-to enter text, upload/record audio, and upload an image — individually or
-combined.
 
 ## Project Structure
 
 ```
 Airport-Assistant/
 ├── backend/
-│   ├── assistant.py           # lazy singleton entry point, warm_up()
-│   ├── schemas.py              # ModalityResult, FusionResponse
+│   ├── assistant.py          
+│   ├── schemas.py             
 │   ├── fusion/
-│   │   ├── router.py           # rule-based fusion/routing, disagreement handling
-│   │   └── confidence.py       # per-modality confidence ranges & thresholds
+│   │   ├── router.py         
+│   │   └── confidence.py       
 │   ├── text/
 │   │   ├── intent_classifier.py
 │   │   ├── entities.py
-│   │   └── retrieval.py        # MiniLM + FAISS (IndexFlatIP)
+│   │   └── retrieval.py      
 │   ├── image/
-│   │   ├── retrieval.py        # CLIP ViT-B/32 retrieval
-│   │   └── ocr_reader.py       # EasyOCR sign reading
+│   │   ├── retrieval.py      
+│   │   └── ocr_reader.py      
 │   └── audio/
-│       └── whisper_model.py    # Whisper base transcription
+│       └── whisper_model.py  
 ├── frontend/
-│   ├── app.py                  # Streamlit entry point
+│   ├── app.py                 
 │   ├── components/
 │   │   ├── composer.py
 │   │   ├── response.py
@@ -65,9 +56,9 @@ Airport-Assistant/
 │       └── custom.css
 ├── data/
 │   ├── knowledge_base/
-│   │   └── airport_kb.json     # 22 records, 16 categories
-│   ├── images/                 # 88 mockup images across 16 categories
-│   ├── audio/                  # sample passenger voice queries
+│   │   └── airport_kb.json   
+│   ├── images/                 
+│   ├── audio/                 
 │   └── text/
 │       └── airport_queries.csv
 ├── evaluation/                 # evaluation outputs referenced in the report
