@@ -24,6 +24,3 @@ streamlit run frontend/app.py
 on a T4 GPU. This is not part of the production Streamlit pipeline, which is fully CPU-deployable —
 see the report's Model Design section for the accuracy-vs-deployability trade-off discussion.
 
-## License
-
-MIT
