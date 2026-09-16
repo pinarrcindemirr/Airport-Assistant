@@ -17,3 +17,5 @@ pip install -r requirements.txt
 ```bash
 streamlit run frontend/app.py
 ```
+## Colab link
+https://colab.research.google.com/drive/11txBPjFQtMUw5e6-lWmIKFOr5ZAg144e?usp=sharing
