@@ -1,0 +1,8 @@
+scenario,input,answered,confidence,matched_record,expected_record,correct
+Text only,text='where is gate B12',True,1.0,gate_b12,gate_b12,True
+Voice only,audio=a05.m4a,False,0.203,,,
+Image only,image=gate_a05_v1.png,True,0.85,gate_a05,gate_a05,True
+Image + Text (agreement),text='where is gate B12' + image=gate_b12_v1.png,True,0.868,gate_b12,gate_b12,True
+Image + Text (disagreement),text='where is the baggage claim' + image=gate_b12_v1.png,True,0.769,baggage_claim_t1,,
+Voice + Image,image=gate_b12_v1.png + audio=a01.m4a,True,0.868,gate_b12,gate_b12,True
+Out-of-scope (should abstain),text='what is the capital of France',False,0.0,,,
