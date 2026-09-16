@@ -8,9 +8,9 @@ a06,find_lounge,quiet,can I rest somewhere quiet before my flight,0.0,0.0
 a07,find_checkin,quiet,where do I check in,0.0,0.0
 a08,find_checkin,quiet,where do I drop my bags before security,0.0,0.0
 a09,find_food,quiet,im hungry where can I eat,0.0,0.0
-a10,find_food,noisy,coffee near gate A,1.0,1.0
+a10,find_food,noisy,coffee near gate A,1.25,1.0
 a11,find_currency,quiet,where can I get cash,0.0,0.0
 a12,flight_status,quiet,is my flight on time,0.0,0.2
 a13,find_customs,noisy,where is passport control,0.0,0.0
-a14,find_pharmacy,quiet,is there a pharmacy in the airport,0.14285714285714285,0.0
+a14,find_pharmacy,quiet,is there a pharmacy in the airport,0.1428571428571428,0.0
 a15,find_help_desk,fast,i lost my passport who do I talk to,0.0,0.0
