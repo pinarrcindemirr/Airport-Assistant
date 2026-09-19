@@ -3,18 +3,24 @@
 ## Installation
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/pinarrcindemirr/Airport-Assistant.git
 cd Airport-Assistant
 
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
 
-pip install -r requirements.txt
+# Windows
+venv\Scripts\activate
+
+# macOS / Linux
+source venv/bin/activate   
+
+
 ```
 
 ## Running
 
 ```bash
+pip install -r requirements.txt
 streamlit run frontend/app.py
 ```
 ## Colab link
